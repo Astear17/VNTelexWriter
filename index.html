@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vietnamese Telex Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .editor-font-sans {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+        .editor-font-serif {
+            font-family: 'Merriweather', serif;
+        }
+        textarea {
+            resize: none;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="bg-stone-50 h-screen flex flex-col overflow-hidden text-slate-800">
+
+    <!-- Toolbar -->
+    <nav class="bg-white border-b border-stone-200 px-4 py-3 flex items-center justify-between shadow-sm z-10 shrink-0">
+        <div class="flex items-center gap-3">
+            <div class="bg-indigo-600 text-white font-bold rounded p-1.5 leading-none">VN</div>
+            <h1 class="font-bold text-lg text-slate-700 hidden md:block">Telex Editor</h1>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <div class="hidden md:flex items-center gap-2 mr-4 bg-stone-100 rounded-lg p-1">
+                <button onclick="setFont('sans')" class="px-3 py-1.5 text-sm rounded-md hover:bg-white hover:shadow-sm transition-all font-sans" id="btn-sans">Sans</button>
+                <button onclick="setFont('serif')" class="px-3 py-1.5 text-sm rounded-md hover:bg-white hover:shadow-sm transition-all font-serif text-slate-500" id="btn-serif">Serif</button>
+            </div>
+
+            <button onclick="toggleMode()" id="mode-toggle" class="flex items-center gap-2 px-3 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors font-medium text-sm">
+                <span class="w-2 h-2 rounded-full bg-emerald-600" id="mode-indicator"></span>
+                Telex: ON
+            </button>
+
+            <button onclick="copyText()" class="flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors shadow-sm active:scale-95">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span>Copy</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Editor Area -->
+    <main class="flex-grow relative w-full max-w-4xl mx-auto bg-white shadow-xl my-4 md:my-8 rounded-lg overflow-hidden flex flex-col">
+        <div class="bg-white flex-grow relative">
+            <textarea 
+                id="editor" 
+                class="w-full h-full p-8 md:p-12 text-lg md:text-xl leading-relaxed outline-none border-none editor-font-sans text-slate-800"
+                placeholder="Bắt đầu gõ tiếng Việt ở đây... (Start typing Vietnamese here...)"
+                spellcheck="false"
+            ></textarea>
+            
+            <!-- Success Toast -->
+            <div id="toast" class="absolute top-4 right-4 bg-slate-800 text-white px-4 py-2 rounded-lg shadow-lg transform transition-all duration-300 opacity-0 translate-y-[-10px] pointer-events-none">
+                Copied to clipboard!
+            </div>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="bg-stone-50 border-t border-stone-100 px-6 py-2 text-xs text-stone-400 flex justify-between">
+            <span id="word-count">0 words</span>
+            <span class="hidden md:inline">Supports: aa, ee, oo, dd, aw, ow, w, s, f, r, x, j</span>
+        </div>
+    </main>
+
+    <script>
+        // --- TELEX ENGINE ---
+        // A lightweight, custom mapping engine for converting Telex patterns to Vietnamese
+        
+        const VOWELS = {
+            'a': [['à','á','ả','ã','ạ'], 'ă', 'â'],
+            'e': [['è','é','ẻ','ẽ','ẹ'], 'ê'],
+            'o': [['ò','ó','ỏ','õ','ọ'], 'ô', 'ơ'],
+            'u': [['ù','ú','ủ','ũ','ụ'], 'ư'],
+            'i': [['ì','í','ỉ','ĩ','ị']],
+            'y': [['ỳ','ý','ỷ','ỹ','ỵ']],
+            'd': ['đ']
+        };
+
+        // Mapping for compound vowels (raw input -> base character)
+        const COMPOUND_MAPPING = {
+            'aa': 'â',
+            'aw': 'ă',
+            'ee': 'ê',
+            'oo': 'ô',
+            'ow': 'ơ',
+            'uw': 'ư', // strict uw
+            'w': 'ư',  // loose w (e.g., tuw -> tư)
+            'dd': 'đ'
+        };
+
+        // Mapping for tones
+        const TONE_MAPPING = {
+            's': 1, // Acute (Sắc)
+            'f': 0, // Grave (Huyền)
+            'r': 2, // Hook (Hỏi)
+            'x': 3, // Tilde (Ngã)
+            'j': 4  // Dot (Nặng)
+        };
+
+        // Reverse mapping for vowel groups to help finding the base char
+        // e.g. 'ấ' -> base 'â', tone 1
+        // This is complex, so we use a transformation strategy on the *last word*.
+
+        // Full Vietnamese Charset Arrays for indexing
+        const CHAR_MAP = {
+            'a': 'aàáảãạ',
+            'ă': 'ăằắẳẵặ',
+            'â': 'âầấẩẫậ',
+            'e': 'eèéẻẽẹ',
+            'ê': 'êềếểễệ',
+            'i': 'iìíỉĩị',
+            'o': 'oòóỏõọ',
+            'ô': 'ôồốổỗộ',
+            'ơ': 'ơờớởỡợ',
+            'u': 'uùúủũụ',
+            'ư': 'ưừứửữự',
+            'y': 'yỳýỷỹỵ'
+        };
+
+        let isTelexEnabled = true;
+
+        function convertWordToVietnamese(word) {
+            if (!word) return word;
+            
+            // Decomposition Strategy:
+            // 1. Identify the "root" characters and any trailing telex modifiers in the buffer.
+            // However, since we are typing character by character, we are best off running a robust regex replacer on the word.
+            
+            let result = word;
+
+            // 1. Handle 'dd' -> 'đ'
+            // We use a lookbehindish approach by replacing patterns.
+            // Note: We want to allow escaping, but for simple web editor, greedy replacement is usually expected.
+            result = result.replace(/dd/g, 'đ');
+            result = result.replace(/DD/g, 'Đ');
+
+            // 2. Handle Vowel Compounds (aa, ee, oo)
+            // Order matters: aw/ow/uw check first or last?
+            // Generally: aa->â, ee->ê, oo->ô
+            result = result.replace(/aa/g, 'â');
+            result = result.replace(/AA/g, 'Â');
+            result = result.replace(/ee/g, 'ê');
+            result = result.replace(/EE/g, 'Ê');
+            result = result.replace(/oo/g, 'ô');
+            result = result.replace(/OO/g, 'Ô');
+            
+            // 3. Handle w-based vowels (aw, ow, uw) and standalone w
+            // 'aw' -> 'ă'
+            result = result.replace(/aw/g, 'ă');
+            result = result.replace(/AW/g, 'Ă');
+            // 'ow' -> 'ơ'
+            result = result.replace(/ow/g, 'ơ');
+            result = result.replace(/OW/g, 'Ơ');
+            // 'uw' -> 'ư'
+            result = result.replace(/uw/g, 'ư');
+            result = result.replace(/UW/g, 'Ư');
+            // standalone 'w' often behaves like 'ư' if following u/o, or just 'ư' generally in telex
+            // Simple approach: replace remaining w with ư if it's part of a word structure, 
+            // but usually strict telex requires w to be attached.
+            // Let's do the standard [uo]w -> [uo]w (already handled), but just w -> ư
+            // We only replace 'w' if it's not part of a previous match.
+            // Because we replaced aw/ow/uw, remaining w's are likely intended as ư (e.g., 'tw' -> 'tư')
+            result = result.replace(/w/g, 'ư');
+            result = result.replace(/W/g, 'Ư');
+
+
+            // 4. Handle Tones (s, f, r, x, j)
+            // This is the trickiest part. The tone key might be at the end of the word (e.g., 'toois' -> 'tối')
+            // or immediately after the vowel (e.g., 'tốis' - rarer in typing flow but possible).
+            
+            // We scan for tone markers at the END of the string first.
+            const toneKeys = ['s', 'f', 'r', 'x', 'j'];
+            const lastChar = result.slice(-1);
+            
+            if (toneKeys.includes(lastChar)) {
+                const toneIndex = TONE_MAPPING[lastChar]; // 0-4
+                const baseWord = result.slice(0, -1); // Word without the tone key
+                
+                // Try to apply tone to the vowels in baseWord
+                const newWord = applyTone(baseWord, toneIndex);
+                
+                // If a tone was successfully applied, update result. 
+                // If not (e.g. word has no vowels), keep the character (e.g. "dfs" -> "dfs")
+                if (newWord !== baseWord) {
+                    return newWord;
+                }
+            }
+            
+            // Also handle "Z" to remove tone? (Standard Telex feature)
+            if (lastChar === 'z') {
+                const baseWord = result.slice(0, -1);
+                return removeTone(baseWord);
+            }
+
+            return result;
+        }
+
+        // Helper: Apply tone to the correct vowel in a word
+        function applyTone(word, toneIndex) {
+            // Logic: Find the main vowel.
+            // Rules:
+            // 1. If "qu" + vowel, vowel gets tone.
+            // 2. If "gi" + vowel, vowel gets tone.
+            // 3. Priority: ô, ê, â > o, e, a > others.
+            // 4. If no specific rule, usually the last vowel or the one in the middle.
+            
+            // Simplified Robust Logic:
+            // Convert string to array of chars
+            let chars = word.split('');
+            let vowelIndices = [];
+            
+            // Find all vowels
+            for (let i = 0; i < chars.length; i++) {
+                if (isVowel(chars[i])) {
+                    vowelIndices.push(i);
+                }
+            }
+
+            if (vowelIndices.length === 0) return word; // No vowels
+
+            let targetIndex = -1;
+
+            // Heuristic 1: If only 1 vowel, hit it.
+            if (vowelIndices.length === 1) {
+                targetIndex = vowelIndices[0];
+            } 
+            // Heuristic 2: 2 vowels (diphthongs)
+            else if (vowelIndices.length === 2) {
+                // Check specific logic like 'oa', 'oe', 'uy' -> tone on 2nd
+                // 'ia', 'ua', 'ưa' -> tone on 1st usually? No, 'mía', 'mua', 'mưa'.
+                // But 'toán', 'tuân' -> tone on 2nd (a, â).
+                
+                const v1 = chars[vowelIndices[0]];
+                const v2 = chars[vowelIndices[1]];
+                
+                // Priority check (ê, ô, â, ă takes precedence)
+                // e.g., "tuân" (u, â) -> â gets tone.
+                if (['ê','ô','â','ă'].includes(v1)) targetIndex = vowelIndices[0];
+                else if (['ê','ô','â','ă'].includes(v2)) targetIndex = vowelIndices[1];
+                else {
+                    // If 'oa', 'oe', 'uy', 'ue' -> 2nd vowel
+                    // If 'ia', 'ua', 'ưa' (ends of words) -> 1st vowel
+                    // We can check if the 2nd vowel is at the end of the word?
+                    // This is getting complex. Let's stick to a solid general rule:
+                    // If not ending in a consonant, usually 1st? (mía)
+                    // If ending in consonant, usually 2nd? (toán)
+                    
+                    // Actually, simple mapping check:
+                    // If v2 is e, ê, i (except uy), y -> v2
+                    // Let's pick the LAST vowel by default for now, unless v1 is a strong vowel?
+                    // Let's try: Target the last vowel unless the word ends with that vowel (open syllable) then maybe 1st?
+                    // Standard implementation uses a predefined list.
+                    
+                    // Simple implementation:
+                    // If v2 is 'ơ' or 'ê' or 'ô' or 'ă' or 'â', prioritize it.
+                    // Else if v1 is 'ơ'...
+                    
+                    // Fallback: Last vowel usually works for 'toan', 'tuan', 'huyen'.
+                    // Except 'tuoi' -> 'tuổi' (on o). Wait, 'uôi' has 3 vowels.
+                    
+                    targetIndex = vowelIndices[vowelIndices.length - 1]; // Default to last
+                    
+                    // Exception: 'oa', 'oe', 'uy' -> tone on last (correct)
+                    // Exception: 'ia', 'ua', 'ưa' -> tone on first.
+                    // e.g. 'mia' -> 'mía'.
+                    const pair = v1 + v2;
+                    if (['ia', 'ua', 'ưa'].includes(pair) && vowelIndices[1] === chars.length - 1) {
+                         targetIndex = vowelIndices[0];
+                    }
+                }
+            }
+            // Heuristic 3: 3 vowels (triphthongs like 'uôi', 'ươi') -> Middle one usually
+            else if (vowelIndices.length === 3) {
+                targetIndex = vowelIndices[1];
+            } else {
+                targetIndex = vowelIndices[vowelIndices.length - 1];
+            }
+            
+            // Apply the tone
+            chars[targetIndex] = addToneToChar(chars[targetIndex], toneIndex);
+            
+            return chars.join('');
+        }
+
+        function isVowel(char) {
+            const vowels = "aăâeêioôơuưyAĂÂEÊIOÔƠUƯY";
+            // Also need to include accented versions if we are re-toning
+            // But input here usually has base vowels + maybe existing tone
+            return vowels.includes(char) || getBaseVowelAndTone(char).base !== null;
+        }
+
+        function addToneToChar(char, toneIndex) {
+            // Get base char (remove existing tone first)
+            const { base, caseType } = getBaseVowelAndTone(char);
+            if (!base) return char;
+
+            // Find the row in CHAR_MAP
+            const map = CHAR_MAP[base];
+            if (!map) return char; // Should not happen
+
+            // Tone index 0-4 mapping to map string index 1-5 (0 is no tone)
+            // map string: base, sac, huyen, hoi, nga, nang
+            // Wait, standard map is usually: Ngang (0), Sắc (1), Huyền (2), Hỏi (3), Ngã (4), Nặng (5)
+            
+            // My TONE_MAPPING was: s(1), f(0-grave), r(2-hook), x(3-tilde), j(4-dot)
+            // Let's realign with CHAR_MAP string: "a à á ả ã ạ"
+            // Index: 0 (base), 1 (grave), 2 (acute), 3 (hook), 4 (tilde), 5 (dot)
+            
+            // Remap input toneIndex to CHAR_MAP index
+            // Input: s->1 (acute). Map needs index 2.
+            // Input: f->0 (grave). Map needs index 1.
+            
+            let mapIndex = 0;
+            if (toneIndex === 0) mapIndex = 1; // f -> grave
+            if (toneIndex === 1) mapIndex = 2; // s -> acute
+            if (toneIndex === 2) mapIndex = 3; // r -> hook
+            if (toneIndex === 3) mapIndex = 4; // x -> tilde
+            if (toneIndex === 4) mapIndex = 5; // j -> dot
+
+            let newChar = map[mapIndex];
+            if (caseType === 'upper') newChar = newChar.toUpperCase();
+            return newChar;
+        }
+        
+        function removeTone(word) {
+            let chars = word.split('');
+            for(let i=0; i<chars.length; i++) {
+                 const { base, caseType } = getBaseVowelAndTone(chars[i]);
+                 if (base) {
+                     chars[i] = caseType === 'upper' ? base.toUpperCase() : base;
+                 }
+            }
+            return chars.join('');
+        }
+
+        function getBaseVowelAndTone(char) {
+            const lower = char.toLowerCase();
+            for (const [base, variants] of Object.entries(CHAR_MAP)) {
+                if (variants.includes(lower)) {
+                    return { base: base, caseType: char === lower ? 'lower' : 'upper' };
+                }
+            }
+            return { base: null, caseType: null };
+        }
+
+        // --- DOM & INPUT HANDLING ---
+
+        const editor = document.getElementById('editor');
+        const wordCountEl = document.getElementById('word-count');
+
+        editor.addEventListener('input', (e) => {
+            if (!isTelexEnabled) {
+                updateWordCount();
+                return;
+            }
+
+            // The heavy lifting: Intercept the input
+            const cursorPosition = editor.selectionStart;
+            const text = editor.value;
+
+            // 1. Identify the word being typed (text before cursor)
+            // We look for the last whitespace before cursor to find the start of the word
+            const textBeforeCursor = text.slice(0, cursorPosition);
+            const lastSeparatorIndex = Math.max(
+                textBeforeCursor.lastIndexOf(' '), 
+                textBeforeCursor.lastIndexOf('\n'),
+                textBeforeCursor.lastIndexOf('\t'),
+                -1
+            );
+            
+            const startOfWord = lastSeparatorIndex + 1;
+            const wordToProcess = textBeforeCursor.slice(startOfWord);
+            
+            // If the word contains punctuation, we probably shouldn't process the punctuation part
+            // But simplicity: process the continuous string of non-whitespace.
+            
+            // Check if we actually have a word
+            if (wordToProcess.length > 0) {
+                const convertedWord = convertWordToVietnamese(wordToProcess);
+                
+                if (convertedWord !== wordToProcess) {
+                    // Replace text
+                    const textAfterCursor = text.slice(cursorPosition);
+                    const newTextBeforeCursor = text.slice(0, startOfWord) + convertedWord;
+                    
+                    editor.value = newTextBeforeCursor + textAfterCursor;
+                    
+                    // Restore cursor
+                    editor.selectionStart = editor.selectionEnd = newTextBeforeCursor.length;
+                }
+            }
+            
+            updateWordCount();
+        });
+
+        function updateWordCount() {
+            const text = editor.value.trim();
+            const count = text ? text.split(/\s+/).length : 0;
+            wordCountEl.textContent = `${count} word${count !== 1 ? 's' : ''}`;
+        }
+
+        // --- TOOLBAR ACTIONS ---
+
+        function setFont(type) {
+            const btnSans = document.getElementById('btn-sans');
+            const btnSerif = document.getElementById('btn-serif');
+            
+            if (type === 'sans') {
+                editor.classList.remove('editor-font-serif');
+                editor.classList.add('editor-font-sans');
+                btnSans.classList.remove('text-slate-500');
+                btnSerif.classList.add('text-slate-500');
+            } else {
+                editor.classList.remove('editor-font-sans');
+                editor.classList.add('editor-font-serif');
+                btnSerif.classList.remove('text-slate-500');
+                btnSans.classList.add('text-slate-500');
+            }
+        }
+
+        function toggleMode() {
+            isTelexEnabled = !isTelexEnabled;
+            const btn = document.getElementById('mode-toggle');
+            const indicator = document.getElementById('mode-indicator');
+            
+            if (isTelexEnabled) {
+                btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-600"></span> Telex: ON`;
+                btn.className = "flex items-center gap-2 px-3 py-2 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors font-medium text-sm";
+            } else {
+                btn.innerHTML = `<span class="w-2 h-2 rounded-full bg-slate-400"></span> Telex: OFF`;
+                btn.className = "flex items-center gap-2 px-3 py-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200 transition-colors font-medium text-sm";
+            }
+            editor.focus();
+        }
+
+        function copyText() {
+            editor.select();
+            document.execCommand('copy');
+            editor.setSelectionRange(editor.value.length, editor.value.length); // deselect
+            
+            const toast = document.getElementById('toast');
+            toast.classList.remove('opacity-0', 'translate-y-[-10px]');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-[-10px]');
+            }, 2000);
+        }
+
+        // Init
+        editor.focus();
+
+    </script>
+</body>
+</html>
