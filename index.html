@@ -1,9 +1,307 @@
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình soạn thảo Telex tiếng Việt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Roboto:wght@400;700&family=Open+Sans:wght@400;700&family=Noto+Serif:wght@400;700&family=Lato:wght@400;700&family=Montserrat:wght@400;700&family=PT+Sans:wght@400;700&family=Source+Sans+Pro:wght@400;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-light: #fefefe;
+            --text-light: #1e293b;
+            --bg-secondary-light: #f8fafc;
+            --border-light: #e2e8f0; 
+            --nav-bg-light: #ffffff;
+            --nav-text-light: #334155; /* slate-700 */
+            --placeholder-light: #94a3b8; /* slate-400 */
+            --mode-toggle-on-bg: #d1fae5; /* emerald-100 */
+            --mode-toggle-on-text: #059669; /* emerald-700 */
+            --mode-toggle-off-bg: #e2e8f0; /* slate-200 */
+            --mode-toggle-off-text: #475569; /* slate-600 */
+            --copy-btn-bg: #1e293b;
+            --copy-btn-hover-bg: #334155;
+            --toast-bg: #1e293b;
+            --toast-text: #ffffff;
+            --status-bg: #f8fafc; /* slate-50 */
+            --status-text: #94a3b8; /* slate-400 */
+            --gradient-color: linear-gradient(108deg, #0894FF, #C959DD 34%, #FF2E54 68%, #FF9004);
+            --footer-text-color: #475569; /* slate-600 */
+            --table-header-bg: #f1f5f9;
+            --table-border: #cbd5e1;
+            /* New Hover Colors */
+            --button-hover-bg: #e2e8f0; /* slate-200 */
+        }
+
+        .dark {
+            --bg-light: #1a202c; /* near slate-900 */
+            --text-light: #e2e8f0; /* slate-200 */
+            --bg-secondary-light: #2d3748; /* near slate-800 */
+            --border-light: #4a5568; /* near slate-700 */
+            --nav-bg-light: #2d3748;
+            --nav-text-light: #cbd5e0; /* slate-300 */
+            --placeholder-light: #a0aec0; /* slate-500 */
+            --mode-toggle-on-bg: #064e3b; /* emerald-900 */
+            --mode-toggle-on-text: #6ee7b7; /* emerald-300 */
+            --mode-toggle-off-bg: #334155; /* slate-700 */
+            --mode-toggle-off-text: #cbd5e0; /* slate-300 */
+            --copy-btn-bg: #4a5568;
+            --copy-btn-hover-bg: #64748b; /* slate-500 */
+            --toast-bg: #4a5568;
+            --toast-text: #f8fafc;
+            --status-bg: #2d3748;
+            --status-text: #a0aec0;
+            --footer-text-color: #cbd5e0;
+            --table-header-bg: #2d3748;
+            --table-border: #4a5568;
+            /* New Hover Colors */
+            --button-hover-bg: #334155; /* slate-700 */
+        }
+
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        /* UNIVERSAL SMOOTH TRANSITION for Theme Elements */
+        body, nav, button, textarea, 
+        .bg-secondary, .status-bg, .table-header-bg, th, td, 
+        .bg-primary, .nav-bg, .border-primary, div {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        /* Apply dynamic colors */
+        .bg-primary { background-color: var(--bg-light); }
+        .text-primary { color: var(--text-light); }
+        .bg-secondary { background-color: var(--bg-secondary-light); }
+        .border-primary { border-color: var(--border-light); }
+        .nav-bg { background-color: var(--nav-bg-light); }
+        .nav-text { color: var(--nav-text-light); }
+        .placeholder-text::placeholder { color: var(--placeholder-light); }
+        .mode-on-bg { background-color: var(--mode-toggle-on-bg); }
+        .mode-on-text { color: var(--mode-toggle-on-text); }
+        .mode-off-bg { background-color: var(--mode-toggle-off-bg); }
+        .mode-off-text { color: var(--mode-toggle-off-text); }
+        .copy-btn-bg { background-color: var(--copy-btn-bg); }
+        .copy-btn-hover-bg:hover { background-color: var(--copy-btn-hover-bg); }
+        .toast-bg { background-color: var(--toast-bg); }
+        .toast-text { color: var(--toast-text); }
+        .status-bg { background-color: var(--status-bg); }
+        .status-text { color: var(--status-text); }
+        .footer-text { color: var(--footer-text-color); }
+        .table-header-bg { background-color: var(--table-header-bg); }
+        .table-border { border-color: var(--table-border); }
+
+        textarea {
+            resize: none;
+            background-color: transparent; /* Crucial for Dark Mode */
+        }
+        
+        /* --- FIX: Custom Hover Styles (To achieve the desired gray on hover) --- */
+        .primary-button-hover:hover {
+            background-color: var(--button-hover-bg) !important; 
+        }
+
+        /* Styles for the Telex Mode button (since its colors are dynamic) */
+        .telex-mode-toggle:hover {
+            /* Use a slightly darker shade of the current button-hover-bg for contrast */
+            filter: brightness(0.95); 
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary-light);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4a5568;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Specific font styles */
+        .font-roboto { font-family: 'Roboto', sans-serif; }
+        .font-open-sans { font-family: 'Open Sans', sans-serif; }
+        .font-noto-serif { font-family: 'Noto Serif', serif; }
+        .font-lato { font-family: 'Lato', sans-serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .font-pt-sans { font-family: 'PT Sans', sans-serif; }
+        .font-source-sans-pro { font-family: 'Source Sans Pro', sans-serif; }
+        .font-lora { font-family: 'Lora', serif; }
+        .font-be-vietnam-pro { font-family: 'Be Vietnam Pro', sans-serif; }
+        .font-merriweather { font-family: 'Merriweather', serif; }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: var(--gradient-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback for browsers not supporting -webkit-text-fill-color */
+        }
+
+        .gradient-separator {
+            background: var(--gradient-color);
+            height: 2px;
+            width: 100%;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Table Styles */
+        .telex-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .telex-table th, .telex-table td {
+            border: 1px solid var(--table-border);
+            padding: 8px 12px;
+            text-align: center;
+        }
+        .telex-table th {
+            background-color: var(--table-header-bg);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col overflow-x-hidden">
+
+    <nav class="nav-bg border-b border-primary px-4 py-3 flex items-center justify-between shadow-sm z-10 shrink-0 sticky top-0">
+        <div class="flex items-center gap-4">
+            <div class="bg-[#DA251D] text-[#FFDF00] font-bold rounded px-2 py-1 leading-none border-2 border-[#FFDF00] shadow-sm">VN</div>
+            <h1 class="font-bold text-lg nav-text gradient-text hidden sm:block">Telex Writer</h1>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="relative inline-block text-left">
+                <button type="button" class="inline-flex justify-center w-full rounded-md border border-primary shadow-sm px-3 py-2 bg-secondary text-sm font-medium text-primary primary-button-hover focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-800 transition-colors" id="font-menu-button" aria-expanded="true" aria-haspopup="true">
+                    <span id="selected-font-name" class="hidden sm:inline">Be Vietnam Pro</span>
+                    <span class="sm:hidden">Font</span>
+                    <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.25 4.25a.75.75 0 01-1.06 0L5.23 8.29a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div id="font-menu" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-nav-bg border border-primary ring-1 ring-black ring-opacity-5 focus:outline-none hidden max-h-60 overflow-y-auto z-50" role="menu" aria-orientation="vertical" aria-labelledby="font-menu-button" tabindex="-1">
+                    <div class="py-1" role="none">
+                        </div>
+                </div>
+            </div>
+
+            <button onclick="toggleDarkMode()" class="px-3 py-2 rounded-lg transition-colors font-medium text-sm flex items-center gap-2 bg-secondary text-primary primary-button-hover" aria-label="Toggle Dark Mode">
+                <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+            </button>
+
+            <button onclick="toggleMode()" id="mode-toggle" class="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors font-medium text-sm mode-on-bg mode-on-text telex-mode-toggle">
+                <span class="w-2 h-2 rounded-full bg-emerald-600" id="mode-indicator"></span>
+                <span class="hidden sm:inline">Telex</span>
+            </button>
+
+            <button onclick="copyText()" class="flex items-center gap-2 px-4 py-2 rounded-lg shadow-sm active:scale-95 transition-colors copy-btn-bg text-white copy-btn-hover-bg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                <span class="hidden sm:inline">Sao chép</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex flex-col items-center w-full max-w-4xl mx-auto p-4 gap-6">
+        
+        <div class="w-full bg-primary shadow-xl rounded-lg overflow-hidden flex flex-col h-[60vh] md:h-[500px] border border-primary">
+            <div class="flex-grow relative">
+                <textarea 
+                    id="editor" 
+                    class="w-full h-full p-6 md:p-10 text-lg md:text-xl leading-relaxed outline-none border-none placeholder-text text-primary font-be-vietnam-pro bg-transparent"
+                    placeholder="Bắt đầu gõ tiếng Việt ở đây..."
+                    spellcheck="false"
+                ></textarea>
+                
+                <div id="toast" class="absolute top-4 right-4 toast-bg toast-text px-4 py-2 rounded-lg shadow-lg transform transition-all duration-300 opacity-0 translate-y-[-10px] pointer-events-none z-20">
+                    Đã sao chép!
+                </div>
+            </div>
+
+            <div class="status-bg border-t border-primary px-6 py-2 text-xs status-text flex justify-between">
+                <span id="word-count">0 từ</span>
+                <span class="hidden md:inline opacity-75">Trình soạn thảo Telex v1.3</span>
+            </div>
+        </div>
+
+        <div class="w-full bg-primary rounded-lg shadow-md overflow-hidden border border-primary">
+            <div class="table-header-bg px-4 py-2 border-b border-primary font-bold text-sm text-primary">
+                Các dấu tiếng Việt
+            </div>
+            <div class="overflow-x-auto p-0">
+                <table class="telex-table text-sm text-primary">
+                    <thead>
+                        <tr>
+                            <th>Dấu (Mark)</th>
+                            <th>Sắc (´)</th>
+                            <th>Huyền (`)</th>
+                            <th>Hỏi (ˀ)</th>
+                            <th>Ngã (~)</th>
+                            <th>Nặng (.)</th>
+                            <th>â</th>
+                            <th>ê</th>
+                            <th>ô</th>
+                            <th>đ</th>
+                            <th>ă</th>
+                            <th>ơ</th>
+                            <th>ư</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="font-bold bg-secondary">Phím (Key)</td>
+                            <td class="font-mono font-bold text-indigo-500">s</td>
+                            <td class="font-mono font-bold text-indigo-500">f</td>
+                            <td class="font-mono font-bold text-indigo-500">r</td>
+                            <td class="font-mono font-bold text-indigo-500">x</td>
+                            <td class="font-mono font-bold text-indigo-500">j</td>
+                            <td class="font-mono font-bold text-orange-500">aa</td>
+                            <td class="font-mono font-bold text-orange-500">ee</td>
+                            <td class="font-mono font-bold text-orange-500">oo</td>
+                            <td class="font-mono font-bold text-orange-500">dd</td>
+                            <td class="font-mono font-bold text-orange-500">aw</td>
+                            <td class="font-mono font-bold text-orange-500">ow</td>
+                            <td class="font-mono font-bold text-orange-500">w</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 <div class="warning-quote mx-6 my-4 rounded-lg border-l-4 px-5 py-4 flex flex-col gap-2" style="background-color: var(--bg-secondary-light);border-left-color: #FFD600;">
                 <div class="flex items-center gap-2 mb-1">
                     <svg width="22" height="22" fill="#FFD600" viewBox="0 0 24 24">
                         <circle cx="12" cy="12" r="12" fill="#FFD600" opacity="0.1"/>
                         <path d="M12 8v4M12 16h.01" stroke="#FFD600" stroke-width="2" stroke-linecap="round"/>
                     </svg>
+                </button>
+                <div id="font-menu" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-nav-bg border border-primary ring-1 ring-black ring-opacity-5 focus:outline-none hidden max-h-60 overflow-y-auto z-50" role="menu" aria-orientation="vertical" aria-labelledby="font-menu-button" tabindex="-1">
+                    <div class="py-1" role="none">
+                        </div>
                     <span class="font-semibold text-yellow-500" style="color:#FFD600">Lưu ý sử dụng dấu và Telex</span>
                 </div>
                 <span class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -13,3 +311,460 @@
                     <b>Viết tiếng Anh:</b> Nếu cần gõ tiếng Anh (như <span class="font-mono bg-yellow-100 px-1 py-0.5 rounded">web</span>, <span class="font-mono bg-yellow-100 px-1 py-0.5 rounded">email</span>...), hãy tắt Telex bằng nút <span class="font-bold">Telex</span> ở góc trên bên phải. Nếu Telex bật, gõ <span class="font-mono bg-yellow-100 px-1 py-0.5 rounded">wweb</span> sẽ ra <span class="font-mono">ưưeb</span>.
                 </span>
             </div>
+    </main>
+
+    <footer class="mt-auto px-4 py-4 text-center w-full">
+        <div class="gradient-separator mx-auto w-full max-w-4xl"></div>
+        <p class="text-sm footer-text gradient-text font-medium">Triển khai và tổng hợp bởi Astear17</p>
+    </footer>
+
+    <script>
+        // --- TELEX ENGINE (Revised) ---
+        // Implements prioritized replacement logic to better mimic Unikey/AVIM behavior.
+        
+        // Full Vietnamese Charset Arrays for indexing
+        const CHAR_MAP = {
+            'a': 'aàáảãạ',
+            'ă': 'ăằắẳẵặ',
+            'â': 'âầấẩẫậ',
+            'e': 'eèéẻẽẹ',
+            'ê': 'êềếểễệ',
+            'i': 'iìíỉĩị',
+            'o': 'oòóỏõọ',
+            'ô': 'ôồốổỗộ',
+            'ơ': 'ơờớởỡợ',
+            'u': 'uùúủũụ',
+            'ư': 'ưừứửữự',
+            'y': 'yỳýỷỹỵ'
+        };
+
+        const TONE_MAPPING = {
+            's': 1, // Sắc (Acute)
+            'f': 0, // Huyền (Grave)
+            'r': 2, // Hỏi (Hook)
+            'x': 3, // Ngã (Tilde)
+            'j': 4  // Nặng (Dot)
+        };
+
+        let isTelexEnabled = true;
+
+        function convertWordToVietnamese(word) {
+            if (!word) return word;
+            let result = word;
+            let originalCase = word; // For simple case matching if needed
+
+            // 1. Handle Escaped 'w' (ww -> w) FIRST.
+            // We temporarily replace 'ww' with a placeholder to protect it.
+            // Using a rare sequence that won't be typed.
+            const WW_PLACEHOLDER = '___WW___';
+            result = result.replace(/ww/gi, WW_PLACEHOLDER);
+
+            // 2. Special strict cases (priority)
+            
+            // Handle quaw -> quă (exception where uaw does not become ưa)
+            result = result.replace(/quaw/gi, (m) => {
+                return (m[0] === m[0].toUpperCase()) ? 'Quă' : 'quă';
+            });
+
+            // uaw -> ưa (for words like m-ưa, t-ưa)
+            result = result.replace(/uaw/gi, (m) => {
+                return (m[0] === m[0].toUpperCase()) ? 'ƯA' : 'ưa';
+            });
+            
+            // 3. Composite Vowel Modifications with 'w' suffix
+            // uo...w -> ươ...
+            // e.g. uoiw -> ươi, uouw -> ươu, uongw -> ương
+            // We capture the text between uo and w
+            result = result.replace(/uo([a-zA-Z]*)w/gi, (m, p1) => {
+                const isUpper = m[0] === m[0].toUpperCase();
+                return (isUpper ? 'ƯƠ' : 'ươ') + p1;
+            });
+
+            // ua...w -> uă... (e.g. quanw -> quăn)
+            // Note: uaw is already handled above.
+            // This handles ua + [chars] + w
+            result = result.replace(/ua([a-zA-Z]+)w/gi, (m, p1) => {
+                const isUpper = m[0] === m[0].toUpperCase();
+                return (isUpper ? 'UĂ' : 'uă') + p1;
+            });
+            
+            // aw -> ă
+            result = result.replace(/aw/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ă' : 'ă'));
+            
+            // ow -> ơ
+            result = result.replace(/ow/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ơ' : 'ơ'));
+            
+            // uw -> ư
+            result = result.replace(/uw/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ư' : 'ư'));
+
+            // aa -> â
+            result = result.replace(/aa/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Â' : 'â'));
+            
+            // ee -> ê
+            result = result.replace(/ee/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ê' : 'ê'));
+            
+            // oo -> ô
+            result = result.replace(/oo/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ô' : 'ô'));
+            
+            // dd -> đ
+            result = result.replace(/dd/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Đ' : 'đ'));
+            
+            // Generic w -> ư (last resort)
+            result = result.replace(/w/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ư' : 'ư'));
+
+            // Restore escaped w
+            result = result.replace(new RegExp(WW_PLACEHOLDER, 'g'), 'w');
+
+            // 5. Handle Tones
+            // Scan for tone key at the very end of the word.
+            const toneKeys = Object.keys(TONE_MAPPING);
+            const lastChar = result.slice(-1).toLowerCase();
+            
+            if (toneKeys.includes(lastChar)) {
+                const toneIndex = TONE_MAPPING[lastChar];
+                // Check if the char before is actually part of a word?
+                // E.g. "toans" -> "toan" + "s".
+                const baseWord = result.slice(0, -1);
+                
+                // Apply tone to the base word
+                const newWord = applyTone(baseWord, toneIndex);
+                
+                // Only accept change if tone was actually applied (meaning baseWord had vowels)
+                if (newWord !== baseWord) {
+                    return newWord;
+                }
+            }
+            
+            // Handle "Z" to remove tone
+            if (lastChar === 'z') {
+                const baseWord = result.slice(0, -1);
+                return removeTone(baseWord);
+            }
+
+            return result;
+        }
+
+        function applyTone(word, toneIndex) {
+            let chars = word.split('');
+            let vowelIndices = [];
+            
+            // Identify vowels
+            for (let i = 0; i < chars.length; i++) {
+                if (isVowel(chars[i])) {
+                    vowelIndices.push(i);
+                }
+            }
+
+            if (vowelIndices.length === 0) return word;
+
+            let targetIndex = -1;
+
+            // Smart Tone Placement Logic (mimicking standard Vietnamese rules)
+            if (vowelIndices.length === 1) {
+                // Only one vowel -> it gets the tone
+                targetIndex = vowelIndices[0];
+            } else if (vowelIndices.length === 2) {
+                // Diphthongs
+                const i1 = vowelIndices[0];
+                const i2 = vowelIndices[1];
+                const v1 = chars[i1].toLowerCase();
+                const v2 = chars[i2].toLowerCase();
+                
+                // Special case: 'qu' -> u is not considered the nucleus usually.
+                // e.g. "qua" -> "quá" (tone on a). 
+                if ((v1 === 'u' || v1 === 'U') && (chars[i1-1] === 'q' || chars[i1-1] === 'Q')) {
+                     targetIndex = i2; // tone on the vowel after u
+                }
+                // Special case: 'gi' -> i is not nucleus if followed by vowel.
+                // e.g. "gia" -> "giá" (tone on a).
+                else if ((v1 === 'i' || v1 === 'I') && (chars[i1-1] === 'g' || chars[i1-1] === 'G')) {
+                    targetIndex = i2;
+                }
+                else {
+                    // General Rule:
+                    // Check if word ends with the second vowel
+                    const endsWithVowel = (i2 === chars.length - 1);
+                    
+                    if (endsWithVowel) {
+                        // Open syllable
+                        const pair = v1 + v2;
+                        if (['ia', 'ua', 'ưa'].includes(pair)) {
+                            targetIndex = i1;
+                        } else {
+                            if (['oa', 'oe', 'uy', 'ue', 'uy'].includes(pair)) {
+                                targetIndex = i2;
+                            } else {
+                                // default for others (ai, ao, au, eu, oi...) -> 1st
+                                targetIndex = i1;
+                            }
+                        }
+                    } else {
+                        // Closed syllable (ends in consonant like n, c, t, m, p...)
+                        // Simplification: If there is a specific hat/breve vowel (â, ê, ô, ă, ơ, ư), it usually takes priority
+                        if (['â','ê','ô','ă','ơ','ư'].includes(v2)) targetIndex = i2;
+                        else if (['â','ê','ô','ă','ơ','ư'].includes(v1)) targetIndex = i1;
+                        else targetIndex = i2; // default fallback (e.g. "hoan" -> "hoán")
+                    }
+                }
+
+            } else {
+                // 3+ Vowels (Triphthongs) or more complex
+                // Generally the middle one.
+                targetIndex = vowelIndices[1]; 
+            }
+            
+            if (targetIndex !== -1) {
+                chars[targetIndex] = addToneToChar(chars[targetIndex], toneIndex);
+            }
+            
+            return chars.join('');
+        }
+
+        function isVowel(char) {
+            const vowels = "aăâeêioôơuưyAĂÂEÊIOÔƠUƯY";
+            return vowels.includes(char) || getBaseVowelAndTone(char).base !== null;
+        }
+
+        function addToneToChar(char, toneIndex) {
+            const { base, caseType } = getBaseVowelAndTone(char);
+            if (!base) return char;
+
+            const map = CHAR_MAP[base];
+            if (!map) return char;
+
+            let mapIndex = 0;
+            if (toneIndex === 0) mapIndex = 1; // f
+            if (toneIndex === 1) mapIndex = 2; // s
+            if (toneIndex === 2) mapIndex = 3; // r
+            if (toneIndex === 3) mapIndex = 4; // x
+            if (toneIndex === 4) mapIndex = 5; // j
+
+            let newChar = map[mapIndex];
+            if (caseType === 'upper') newChar = newChar.toUpperCase();
+            return newChar;
+        }
+        
+        function removeTone(word) {
+            let chars = word.split('');
+            for(let i=0; i<chars.length; i++) {
+                 const { base, caseType } = getBaseVowelAndTone(chars[i]);
+                 if (base) {
+                     chars[i] = caseType === 'upper' ? base.toUpperCase() : base;
+                 }
+            }
+            return chars.join('');
+        }
+
+        function getBaseVowelAndTone(char) {
+            const lower = char.toLowerCase();
+            for (const [base, variants] of Object.entries(CHAR_MAP)) {
+                if (variants.includes(lower)) {
+                    return { base: base, caseType: char === lower ? 'lower' : 'upper' };
+                }
+            }
+            return { base: null, caseType: null };
+        }
+
+        // --- DOM & INPUT HANDLING ---
+
+        const editor = document.getElementById('editor');
+        const wordCountEl = document.getElementById('word-count');
+        const rootHtml = document.documentElement;
+
+        editor.addEventListener('input', (e) => {
+            if (!isTelexEnabled) {
+                updateWordCount();
+                return;
+            }
+
+            const cursorPosition = editor.selectionStart;
+            const text = editor.value;
+
+            // Find word boundary
+            const textBeforeCursor = text.slice(0, cursorPosition);
+            // Include hyphen and underscore as word separators for better code editing experience
+            const lastSeparatorIndex = Math.max(
+                textBeforeCursor.lastIndexOf(' '), 
+                textBeforeCursor.lastIndexOf('\n'),
+                textBeforeCursor.lastIndexOf('\t'),
+                -1
+            );
+            
+            const startOfWord = lastSeparatorIndex + 1;
+            let wordToProcess = textBeforeCursor.slice(startOfWord);
+            
+            // Separate punctuation
+            const punctuationMatch = wordToProcess.match(/([.,!?;:()"'`]+)$/);
+            let trailingPunctuation = '';
+            if (punctuationMatch) {
+                trailingPunctuation = punctuationMatch[1];
+                wordToProcess = wordToProcess.slice(0, -trailingPunctuation.length);
+            }
+
+            if (wordToProcess.length > 0) {
+                const convertedWord = convertWordToVietnamese(wordToProcess);
+                
+                if (convertedWord !== wordToProcess) {
+                    const textAfterCursor = text.slice(cursorPosition);
+                    const newTextBeforeCursor = text.slice(0, startOfWord) + convertedWord + trailingPunctuation;
+                    
+                    editor.value = newTextBeforeCursor + textAfterCursor;
+                    
+                    editor.selectionStart = editor.selectionEnd = newTextBeforeCursor.length;
+                }
+            }
+            
+            updateWordCount();
+        });
+
+        function updateWordCount() {
+            const text = editor.value.trim();
+            const count = text ? text.split(/\s+/).length : 0;
+            wordCountEl.textContent = `${count} từ`;
+        }
+
+        // --- TOOLBAR ACTIONS ---
+
+        const fonts = [
+            { name: "Be Vietnam Pro", class: "font-be-vietnam-pro" },
+            { name: "Merriweather", class: "font-merriweather" },
+            { name: "Roboto", class: "font-roboto" },
+            { name: "Open Sans", class: "font-open-sans" },
+            { name: "Noto Serif", class: "font-noto-serif" },
+            { name: "Lato", class: "font-lato" },
+            { name: "Montserrat", class: "font-montserrat" },
+            { name: "PT Sans", class: "font-pt-sans" },
+            { name: "Source Sans Pro", class: "font-source-sans-pro" },
+            { name: "Lora", class: "font-lora" },
+            { name: "Segoe UI", class: "font-[Segoe_UI,sans-serif]" }
+        ];
+        
+        const fontMenuButton = document.getElementById('font-menu-button');
+        const fontMenu = document.getElementById('font-menu');
+        const selectedFontName = document.getElementById('selected-font-name');
+        let currentFontClass = "font-be-vietnam-pro";
+
+        function populateFontMenu() {
+            const menuDiv = fontMenu.querySelector('div');
+            menuDiv.innerHTML = ''; 
+            fonts.forEach(font => {
+                const item = document.createElement('a');
+                item.href = "#";
+                // Added primary-button-hover class to font menu items as well for consistency
+                item.classList.add('block', 'px-4', 'py-2', 'text-sm', 'text-primary', 'primary-button-hover', font.class);
+                item.setAttribute('role', 'menuitem');
+                item.setAttribute('tabindex', '-1');
+                item.textContent = font.name;
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    setFont(font.class, font.name);
+                    fontMenu.classList.add('hidden');
+                });
+                menuDiv.appendChild(item);
+            });
+        }
+
+        function setFont(fontClass, fontName) {
+            editor.classList.remove(currentFontClass);
+            editor.classList.add(fontClass);
+            currentFontClass = fontClass;
+            selectedFontName.textContent = fontName;
+        }
+
+        fontMenuButton.addEventListener('click', () => {
+            fontMenu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!fontMenu.contains(event.target) && !fontMenuButton.contains(event.target)) {
+                fontMenu.classList.add('hidden');
+            }
+        });
+
+        const modeToggleBtn = document.getElementById('mode-toggle');
+        const modeIndicator = document.getElementById('mode-indicator');
+
+        function updateModeToggleUI() {
+            if (isTelexEnabled) {
+                modeToggleBtn.classList.add('mode-on-bg', 'mode-on-text');
+                modeToggleBtn.classList.remove('mode-off-bg', 'mode-off-text');
+                modeIndicator.classList.add('bg-emerald-600');
+                modeIndicator.classList.remove('bg-slate-600');
+            } else {
+                modeToggleBtn.classList.add('mode-off-bg', 'mode-off-text');
+                modeToggleBtn.classList.remove('mode-on-bg', 'mode-on-text');
+                modeIndicator.classList.add('bg-slate-600');
+                modeIndicator.classList.remove('bg-emerald-600');
+            }
+        }
+
+        function toggleMode() {
+            isTelexEnabled = !isTelexEnabled;
+            updateModeToggleUI();
+            editor.focus();
+        }
+
+
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+
+        function toggleDarkMode() {
+            if (rootHtml.classList.contains('light')) {
+                rootHtml.classList.remove('light');
+                rootHtml.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                moonIcon.style.display = 'inline-block';
+                sunIcon.style.display = 'none';
+            } else {
+                rootHtml.classList.remove('dark');
+                rootHtml.classList.add('light');
+                localStorage.setItem('theme', 'light');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'inline-block';
+            }
+            editor.focus();
+        }
+
+        function applyThemePreference() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                rootHtml.classList.add('dark');
+                rootHtml.classList.remove('light');
+                moonIcon.style.display = 'inline-block';
+                sunIcon.style.display = 'none';
+            } else {
+                rootHtml.classList.add('light');
+                rootHtml.classList.remove('dark');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'inline-block';
+            }
+        }
+
+        // --- TOAST AND INITIALIZATION ---
+
+        const toast = document.getElementById('toast');
+        function copyText() {
+            editor.select();
+            navigator.clipboard.writeText(editor.value).then(() => {
+                toast.classList.remove('opacity-0', 'translate-y-[-10px]');
+                toast.classList.add('opacity-100', 'translate-y-0');
+                setTimeout(() => {
+                    toast.classList.remove('opacity-100', 'translate-y-0');
+                    toast.classList.add('opacity-0', 'translate-y-[-10px]');
+                }, 2000);
+            });
+            editor.focus();
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            populateFontMenu();
+            applyThemePreference();
+            updateWordCount();
+            updateModeToggleUI(); // Initialize the Telex mode UI
+            editor.focus();
+        };
+
+    </script>
+</body>
+</html>
