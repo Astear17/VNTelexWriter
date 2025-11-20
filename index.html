@@ -13,40 +13,39 @@
             --bg-secondary-light: #f8fafc;
             --border-light: #e2e8f0; 
             --nav-bg-light: #ffffff;
-            --nav-text-light: #334155; /* slate-700 */
-            --placeholder-light: #94a3b8; /* slate-400 */
-            --mode-toggle-on-bg: #d1fae5; /* emerald-100 */
-            --mode-toggle-on-text: #059669; /* emerald-700 */
-            --mode-toggle-off-bg: #e2e8f0; /* slate-200 */
-            --mode-toggle-off-text: #475569; /* slate-600 */
+            --nav-text-light: #334155; 
+            --placeholder-light: #94a3b8; 
+            --mode-toggle-on-bg: #d1fae5; 
+            --mode-toggle-on-text: #059669; 
+            --mode-toggle-off-bg: #e2e8f0;
+            --mode-toggle-off-text: #475569; 
             --copy-btn-bg: #1e293b;
             --copy-btn-hover-bg: #334155;
             --toast-bg: #1e293b;
             --toast-text: #ffffff;
-            --status-bg: #f8fafc; /* slate-50 */
-            --status-text: #94a3b8; /* slate-400 */
+            --status-bg: #f8fafc;
+            --status-text: #94a3b8;
             --gradient-color: linear-gradient(108deg, #0894FF, #C959DD 34%, #FF2E54 68%, #FF9004);
-            --footer-text-color: #475569; /* slate-600 */
+            --footer-text-color: #475569;
             --table-header-bg: #f1f5f9;
             --table-border: #cbd5e1;
-            /* New Hover Colors */
-            --button-hover-bg: #e2e8f0; /* slate-200 */
+            --button-hover-bg: #e2e8f0; 
         }
 
         .dark {
-            --bg-light: #1a202c; /* near slate-900 */
-            --text-light: #e2e8f0; /* slate-200 */
-            --bg-secondary-light: #2d3748; /* near slate-800 */
-            --border-light: #4a5568; /* near slate-700 */
+            --bg-light: #1a202c;
+            --text-light: #e2e8f0;
+            --bg-secondary-light: #2d3748; 
+            --border-light: #4a5568;
             --nav-bg-light: #2d3748;
-            --nav-text-light: #cbd5e0; /* slate-300 */
-            --placeholder-light: #a0aec0; /* slate-500 */
-            --mode-toggle-on-bg: #064e3b; /* emerald-900 */
-            --mode-toggle-on-text: #6ee7b7; /* emerald-300 */
-            --mode-toggle-off-bg: #334155; /* slate-700 */
-            --mode-toggle-off-text: #cbd5e0; /* slate-300 */
+            --nav-text-light: #cbd5e0; 
+            --placeholder-light: #a0aec0; 
+            --mode-toggle-on-bg: #064e3b; 
+            --mode-toggle-on-text: #6ee7b7; 
+            --mode-toggle-off-bg: #334155;
+            --mode-toggle-off-text: #cbd5e0;
             --copy-btn-bg: #4a5568;
-            --copy-btn-hover-bg: #64748b; /* slate-500 */
+            --copy-btn-hover-bg: #64748b;
             --toast-bg: #4a5568;
             --toast-text: #f8fafc;
             --status-bg: #2d3748;
@@ -54,8 +53,7 @@
             --footer-text-color: #cbd5e0;
             --table-header-bg: #2d3748;
             --table-border: #4a5568;
-            /* New Hover Colors */
-            --button-hover-bg: #334155; /* slate-700 */
+            --button-hover-bg: #334155;
         }
 
         body {
@@ -64,14 +62,12 @@
             color: var(--text-light);
         }
 
-        /* UNIVERSAL SMOOTH TRANSITION for Theme Elements */
         body, nav, button, textarea, 
         .bg-secondary, .status-bg, .table-header-bg, th, td, 
         .bg-primary, .nav-bg, .border-primary, div {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         
-        /* Apply dynamic colors */
         .bg-primary { background-color: var(--bg-light); }
         .text-primary { color: var(--text-light); }
         .bg-secondary { background-color: var(--bg-secondary-light); }
@@ -95,21 +91,17 @@
 
         textarea {
             resize: none;
-            background-color: transparent; /* Crucial for Dark Mode */
+            background-color: transparent;
         }
         
-        /* --- FIX: Custom Hover Styles (To achieve the desired gray on hover) --- */
         .primary-button-hover:hover {
             background-color: var(--button-hover-bg) !important; 
         }
 
-        /* Styles for the Telex Mode button (since its colors are dynamic) */
         .telex-mode-toggle:hover {
-            /* Use a slightly darker shade of the current button-hover-bg for contrast */
             filter: brightness(0.95); 
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -130,7 +122,6 @@
             background: #64748b;
         }
 
-        /* Specific font styles */
         .font-roboto { font-family: 'Roboto', sans-serif; }
         .font-open-sans { font-family: 'Open Sans', sans-serif; }
         .font-noto-serif { font-family: 'Noto Serif', serif; }
@@ -142,13 +133,12 @@
         .font-be-vietnam-pro { font-family: 'Be Vietnam Pro', sans-serif; }
         .font-merriweather { font-family: 'Merriweather', serif; }
 
-        /* Gradient Text */
         .gradient-text {
             background: var(--gradient-color);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            color: transparent; /* Fallback for browsers not supporting -webkit-text-fill-color */
+            color: transparent;
         }
 
         .gradient-separator {
@@ -159,7 +149,6 @@
             margin-bottom: 1rem;
         }
 
-        /* Table Styles */
         .telex-table {
             border-collapse: collapse;
             width: 100%;
@@ -276,10 +265,7 @@
     <p class="text-sm footer-text gradient-text font-medium">Triển khai và tổng hợp bởi Astear17</p>
   </footer>
   <script>
-        // --- TELEX ENGINE (Revised) ---
-        // Implements prioritized replacement logic to better mimic Unikey/AVIM behavior.
-        
-        // Full Vietnamese Charset Arrays for indexing
+
         const CHAR_MAP = {
             'a': 'aàáảãạ',
             'ă': 'ăằắẳẵặ',
@@ -296,11 +282,11 @@
         };
 
         const TONE_MAPPING = {
-            's': 1, // Sắc (Acute)
-            'f': 0, // Huyền (Grave)
-            'r': 2, // Hỏi (Hook)
-            'x': 3, // Ngã (Tilde)
-            'j': 4  // Nặng (Dot)
+            's': 1, 
+            'f': 0, 
+            'r': 2,
+            'x': 3, 
+            'j': 4  
         };
 
         let isTelexEnabled = true;
@@ -308,91 +294,76 @@
         function convertWordToVietnamese(word) {
             if (!word) return word;
             let result = word;
-            let originalCase = word; // For simple case matching if needed
+            let originalCase = word;
 
-            // 1. Handle Escaped 'w' (ww -> w) FIRST.
-            // We temporarily replace 'ww' with a placeholder to protect it.
-            // Using a rare sequence that won't be typed.
+
             const WW_PLACEHOLDER = '___WW___';
             result = result.replace(/ww/gi, WW_PLACEHOLDER);
 
-            // 2. Special strict cases (priority)
-            
-            // Handle quaw -> quă (exception where uaw does not become ưa)
+
             result = result.replace(/quaw/gi, (m) => {
                 return (m[0] === m[0].toUpperCase()) ? 'Quă' : 'quă';
             });
 
-            // uaw -> ưa (for words like m-ưa, t-ưa)
-            result = result.replace(/uaw/gi, (m) => {
+          result = result.replace(/uaw/gi, (m) => {
                 return (m[0] === m[0].toUpperCase()) ? 'ƯA' : 'ưa';
             });
             
-            // 3. Composite Vowel Modifications with 'w' suffix
-            // uo...w -> ươ...
-            // e.g. uoiw -> ươi, uouw -> ươu, uongw -> ương
-            // We capture the text between uo and w
             result = result.replace(/uo([a-zA-Z]*)w/gi, (m, p1) => {
                 const isUpper = m[0] === m[0].toUpperCase();
                 return (isUpper ? 'ƯƠ' : 'ươ') + p1;
             });
 
-            // ua...w -> uă... (e.g. quanw -> quăn)
-            // Note: uaw is already handled above.
-            // This handles ua + [chars] + w
             result = result.replace(/ua([a-zA-Z]+)w/gi, (m, p1) => {
                 const isUpper = m[0] === m[0].toUpperCase();
                 return (isUpper ? 'UĂ' : 'uă') + p1;
             });
             
-            // aw -> ă
+
             result = result.replace(/aw/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ă' : 'ă'));
             
-            // ow -> ơ
+
             result = result.replace(/ow/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ơ' : 'ơ'));
             
-            // uw -> ư
+
             result = result.replace(/uw/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ư' : 'ư'));
 
-            // aa -> â
+
             result = result.replace(/aa/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Â' : 'â'));
             
-            // ee -> ê
+
             result = result.replace(/ee/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ê' : 'ê'));
             
-            // oo -> ô
+
             result = result.replace(/oo/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ô' : 'ô'));
             
-            // dd -> đ
+
             result = result.replace(/dd/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Đ' : 'đ'));
             
-            // Generic w -> ư (last resort)
+
             result = result.replace(/w/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ư' : 'ư'));
 
-            // Restore escaped w
+
             result = result.replace(new RegExp(WW_PLACEHOLDER, 'g'), 'w');
 
-            // 5. Handle Tones
-            // Scan for tone key at the very end of the word.
+
             const toneKeys = Object.keys(TONE_MAPPING);
             const lastChar = result.slice(-1).toLowerCase();
             
             if (toneKeys.includes(lastChar)) {
                 const toneIndex = TONE_MAPPING[lastChar];
-                // Check if the char before is actually part of a word?
-                // E.g. "toans" -> "toan" + "s".
+
                 const baseWord = result.slice(0, -1);
                 
-                // Apply tone to the base word
+
                 const newWord = applyTone(baseWord, toneIndex);
-                
-                // Only accept change if tone was actually applied (meaning baseWord had vowels)
+
                 if (newWord !== baseWord) {
                     return newWord;
                 }
             }
             
-            // Handle "Z" to remove tone
+
             if (lastChar === 'z') {
                 const baseWord = result.slice(0, -1);
                 return removeTone(baseWord);
@@ -405,7 +376,7 @@
             let chars = word.split('');
             let vowelIndices = [];
             
-            // Identify vowels
+
             for (let i = 0; i < chars.length; i++) {
                 if (isVowel(chars[i])) {
                     vowelIndices.push(i);
@@ -416,34 +387,30 @@
 
             let targetIndex = -1;
 
-            // Smart Tone Placement Logic (mimicking standard Vietnamese rules)
+
             if (vowelIndices.length === 1) {
-                // Only one vowel -> it gets the tone
+
                 targetIndex = vowelIndices[0];
             } else if (vowelIndices.length === 2) {
-                // Diphthongs
+
                 const i1 = vowelIndices[0];
                 const i2 = vowelIndices[1];
                 const v1 = chars[i1].toLowerCase();
                 const v2 = chars[i2].toLowerCase();
-                
-                // Special case: 'qu' -> u is not considered the nucleus usually.
-                // e.g. "qua" -> "quá" (tone on a). 
+
                 if ((v1 === 'u' || v1 === 'U') && (chars[i1-1] === 'q' || chars[i1-1] === 'Q')) {
-                     targetIndex = i2; // tone on the vowel after u
+
                 }
-                // Special case: 'gi' -> i is not nucleus if followed by vowel.
-                // e.g. "gia" -> "giá" (tone on a).
+
                 else if ((v1 === 'i' || v1 === 'I') && (chars[i1-1] === 'g' || chars[i1-1] === 'G')) {
                     targetIndex = i2;
                 }
                 else {
-                    // General Rule:
-                    // Check if word ends with the second vowel
+
                     const endsWithVowel = (i2 === chars.length - 1);
                     
                     if (endsWithVowel) {
-                        // Open syllable
+
                         const pair = v1 + v2;
                         if (['ia', 'ua', 'ưa'].includes(pair)) {
                             targetIndex = i1;
@@ -451,22 +418,20 @@
                             if (['oa', 'oe', 'uy', 'ue', 'uy'].includes(pair)) {
                                 targetIndex = i2;
                             } else {
-                                // default for others (ai, ao, au, eu, oi...) -> 1st
+
                                 targetIndex = i1;
                             }
                         }
                     } else {
-                        // Closed syllable (ends in consonant like n, c, t, m, p...)
-                        // Simplification: If there is a specific hat/breve vowel (â, ê, ô, ă, ơ, ư), it usually takes priority
+
                         if (['â','ê','ô','ă','ơ','ư'].includes(v2)) targetIndex = i2;
                         else if (['â','ê','ô','ă','ơ','ư'].includes(v1)) targetIndex = i1;
-                        else targetIndex = i2; // default fallback (e.g. "hoan" -> "hoán")
+                        else targetIndex = i2; 
                     }
                 }
 
             } else {
-                // 3+ Vowels (Triphthongs) or more complex
-                // Generally the middle one.
+
                 targetIndex = vowelIndices[1]; 
             }
             
