@@ -130,6 +130,7 @@
         }
         .font-roboto { font-family: 'Roboto', sans-serif; }
         .font-open-sans { font-family: 'Open Sans', sans-serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
         .font-noto-serif { font-family: 'Noto Serif', serif; }
         .font-lato { font-family: 'Lato', sans-serif; }
         .font-montserrat { font-family: 'Montserrat', sans-serif; }
@@ -165,7 +166,7 @@
             background-color: var(--table-header-bg);
             font-weight: 600;
         }
-</style>
+  </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden">
   <nav class="nav-bg border-b border-primary px-4 py-3 flex items-center justify-between shadow-sm z-10 shrink-0 sticky top-0">
@@ -471,6 +472,7 @@
             { name: "Merriweather", class: "font-merriweather" },
             { name: "Roboto", class: "font-roboto" },
             { name: "Open Sans", class: "font-open-sans" },
+            { name: "Inter", class: "font-inter" },
             { name: "Noto Serif", class: "font-noto-serif" },
             { name: "Lato", class: "font-lato" },
             { name: "Montserrat", class: "font-montserrat" },
@@ -501,21 +503,19 @@
             });
         }
         function setFont(fontClass, fontName) {
-  // Update editor font
   editor.classList.remove(currentFontClass);
   editor.classList.add(fontClass);
   currentFontClass = fontClass;
-
-  // Update menu label text
   selectedFontName.textContent = fontName;
-
-  // Apply font class to the menu label itself
   selectedFontName.classList.remove(...selectedFontName.classList);
   selectedFontName.classList.add(fontClass, "hidden", "sm:inline");
-}
+  }
         fontMenuButton.addEventListener('click', () => {
             fontMenu.classList.toggle('hidden');
         });
+        document.addEventListener("DOMContentLoaded", () => {
+  setFont("font-inter", "Inter");
+  });
         document.addEventListener('click', (event) => {
             if (!fontMenu.contains(event.target) && !fontMenuButton.contains(event.target)) {
                 fontMenu.classList.add('hidden');
