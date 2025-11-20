@@ -24,13 +24,13 @@ The editor uses the standard Telex input method. The system relies on key combin
 
 | Vowel | Input Key | Example | Output |
 |-------|-----------|---------|--------|
-| ă     | aw        | banw    | băn    |
+| ă     | aw        | bawn    | băn    |
 | â     | aa        | laam    | lâm    |
-| ê     | ee        | teem    | têm    |
+| ê     | ee        | teen    | tên    |
 | ô     | oo        | tooi    | tôi    |
 | ơ     | ow        | mow     | mơ     |
 | ư     | uw or w   | tuw/tw  | tư     |
-| đ     | dd        | ddien   | điên   |
+| đ     | dd        | ddieen  | điên   |
 
 ### Tone Marks (Diacritics)
 
@@ -79,6 +79,6 @@ This layered approach ensures that complex sequences are handled correctly befor
 To run the VN Telex Writer locally, clone the repository and open the `index.html` file in your browser.
 
 ```bash
-git clone https://github.com/yourusername/vn-telex-writer.git
-cd vn-telex-writer
+git clone https://github.com/Astear17/VNTelexWriter.git
+cd VNTelexWriter
 open index.html
