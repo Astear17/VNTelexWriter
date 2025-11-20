@@ -4,7 +4,7 @@ The **VN Telex Writer** is a fast, single-file, web-based tool for typing Vietna
 
 This project is deployed live on GitHub Pages at:
 
-➡️ [Live Demo: VN Telex Writer](https://your-github-pages-link)
+➡️ [Live Demo: VN Telex Writer](https://astear17.github.io/VNTelexWriter/)
 
 ## ✨ Features
 
