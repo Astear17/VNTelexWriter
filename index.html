@@ -31,7 +31,6 @@
             --table-border: #cbd5e1;
             --button-hover-bg: #e2e8f0; 
         }
-
         .dark {
             --bg-light: #1a202c;
             --text-light: #e2e8f0;
@@ -55,19 +54,16 @@
             --table-border: #4a5568;
             --button-hover-bg: #334155;
         }
-
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
             background-color: var(--bg-light);
             color: var(--text-light);
         }
-
         body, nav, button, textarea, 
         .bg-secondary, .status-bg, .table-header-bg, th, td, 
         .bg-primary, .nav-bg, .border-primary, div {
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
-        
         .bg-primary { background-color: var(--bg-light); }
         .text-primary { color: var(--text-light); }
         .bg-secondary { background-color: var(--bg-secondary-light); }
@@ -88,7 +84,6 @@
         .footer-text { color: var(--footer-text-color); }
         .table-header-bg { background-color: var(--table-header-bg); }
         .table-border { border-color: var(--table-border); }
-
         textarea {
             resize: none;
             background-color: transparent;
@@ -101,7 +96,6 @@
         .telex-mode-toggle:hover {
             filter: brightness(0.95); 
         }
-
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -121,7 +115,6 @@
         .dark ::-webkit-scrollbar-thumb:hover {
             background: #64748b;
         }
-
         .font-roboto { font-family: 'Roboto', sans-serif; }
         .font-open-sans { font-family: 'Open Sans', sans-serif; }
         .font-noto-serif { font-family: 'Noto Serif', serif; }
@@ -132,7 +125,6 @@
         .font-lora { font-family: 'Lora', serif; }
         .font-be-vietnam-pro { font-family: 'Be Vietnam Pro', sans-serif; }
         .font-merriweather { font-family: 'Merriweather', serif; }
-
         .gradient-text {
             background: var(--gradient-color);
             -webkit-background-clip: text;
@@ -140,7 +132,6 @@
             background-clip: text;
             color: transparent;
         }
-
         .gradient-separator {
             background: var(--gradient-color);
             height: 2px;
@@ -148,7 +139,6 @@
             margin-top: 2rem;
             margin-bottom: 1rem;
         }
-
         .telex-table {
             border-collapse: collapse;
             width: 100%;
@@ -265,7 +255,6 @@
     <p class="text-sm footer-text gradient-text font-medium">Triển khai và tổng hợp bởi Astear17</p>
   </footer>
   <script>
-
         const CHAR_MAP = {
             'a': 'aàáảãạ',
             'ă': 'ăằắẳẵặ',
@@ -280,7 +269,6 @@
             'ư': 'ưừứửữự',
             'y': 'yỳýỷỹỵ'
         };
-
         const TONE_MAPPING = {
             's': 1, 
             'f': 0, 
@@ -288,129 +276,78 @@
             'x': 3, 
             'j': 4  
         };
-
         let isTelexEnabled = true;
-
         function convertWordToVietnamese(word) {
             if (!word) return word;
             let result = word;
             let originalCase = word;
-
-
             const WW_PLACEHOLDER = '___WW___';
             result = result.replace(/ww/gi, WW_PLACEHOLDER);
-
-
             result = result.replace(/quaw/gi, (m) => {
                 return (m[0] === m[0].toUpperCase()) ? 'Quă' : 'quă';
             });
-
           result = result.replace(/uaw/gi, (m) => {
                 return (m[0] === m[0].toUpperCase()) ? 'ƯA' : 'ưa';
             });
-            
             result = result.replace(/uo([a-zA-Z]*)w/gi, (m, p1) => {
                 const isUpper = m[0] === m[0].toUpperCase();
                 return (isUpper ? 'ƯƠ' : 'ươ') + p1;
             });
-
             result = result.replace(/ua([a-zA-Z]+)w/gi, (m, p1) => {
                 const isUpper = m[0] === m[0].toUpperCase();
                 return (isUpper ? 'UĂ' : 'uă') + p1;
             });
-            
-
             result = result.replace(/aw/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ă' : 'ă'));
-            
-
             result = result.replace(/ow/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ơ' : 'ơ'));
-            
-
             result = result.replace(/uw/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ư' : 'ư'));
-
-
             result = result.replace(/aa/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Â' : 'â'));
-            
-
             result = result.replace(/ee/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ê' : 'ê'));
-            
-
             result = result.replace(/oo/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ô' : 'ô'));
-            
-
             result = result.replace(/dd/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Đ' : 'đ'));
-            
-
             result = result.replace(/w/gi, (m) => (m[0] === m[0].toUpperCase() ? 'Ư' : 'ư'));
-
-
             result = result.replace(new RegExp(WW_PLACEHOLDER, 'g'), 'w');
-
-
             const toneKeys = Object.keys(TONE_MAPPING);
             const lastChar = result.slice(-1).toLowerCase();
-            
             if (toneKeys.includes(lastChar)) {
                 const toneIndex = TONE_MAPPING[lastChar];
-
                 const baseWord = result.slice(0, -1);
-                
-
                 const newWord = applyTone(baseWord, toneIndex);
-
                 if (newWord !== baseWord) {
                     return newWord;
                 }
             }
-            
-
             if (lastChar === 'z') {
                 const baseWord = result.slice(0, -1);
                 return removeTone(baseWord);
             }
-
             return result;
         }
-
         function applyTone(word, toneIndex) {
             let chars = word.split('');
             let vowelIndices = [];
-            
-
             for (let i = 0; i < chars.length; i++) {
                 if (isVowel(chars[i])) {
                     vowelIndices.push(i);
                 }
             }
-
             if (vowelIndices.length === 0) return word;
-
             let targetIndex = -1;
-
-
             if (vowelIndices.length === 1) {
-
                 targetIndex = vowelIndices[0];
             } else if (vowelIndices.length === 2) {
-
                 const i1 = vowelIndices[0];
                 const i2 = vowelIndices[1];
                 const v1 = chars[i1].toLowerCase();
                 const v2 = chars[i2].toLowerCase();
-
                 if ((v1 === 'u' || v1 === 'U') && (chars[i1-1] === 'q' || chars[i1-1] === 'Q')) {
-
                 }
-
                 else if ((v1 === 'i' || v1 === 'I') && (chars[i1-1] === 'g' || chars[i1-1] === 'G')) {
                     targetIndex = i2;
                 }
                 else {
-
                     const endsWithVowel = (i2 === chars.length - 1);
-                    
-                    if (endsWithVowel) {
 
+                    if (endsWithVowel) {
                         const pair = v1 + v2;
                         if (['ia', 'ua', 'ưa'].includes(pair)) {
                             targetIndex = i1;
@@ -418,49 +355,38 @@
                             if (['oa', 'oe', 'uy', 'ue', 'uy'].includes(pair)) {
                                 targetIndex = i2;
                             } else {
-
                                 targetIndex = i1;
                             }
                         }
                     } else {
-
                         if (['â','ê','ô','ă','ơ','ư'].includes(v2)) targetIndex = i2;
                         else if (['â','ê','ô','ă','ơ','ư'].includes(v1)) targetIndex = i1;
                         else targetIndex = i2; 
                     }
                 }
-
             } else {
-
                 targetIndex = vowelIndices[1]; 
             }
-            
             if (targetIndex !== -1) {
                 chars[targetIndex] = addToneToChar(chars[targetIndex], toneIndex);
             }
-            
             return chars.join('');
         }
-
         function isVowel(char) {
             const vowels = "aăâeêioôơuưyAĂÂEÊIOÔƠUƯY";
             return vowels.includes(char) || getBaseVowelAndTone(char).base !== null;
         }
-
         function addToneToChar(char, toneIndex) {
             const { base, caseType } = getBaseVowelAndTone(char);
             if (!base) return char;
-
             const map = CHAR_MAP[base];
             if (!map) return char;
-
             let mapIndex = 0;
-            if (toneIndex === 0) mapIndex = 1; // f
-            if (toneIndex === 1) mapIndex = 2; // s
-            if (toneIndex === 2) mapIndex = 3; // r
-            if (toneIndex === 3) mapIndex = 4; // x
-            if (toneIndex === 4) mapIndex = 5; // j
-
+            if (toneIndex === 0) mapIndex = 1;
+            if (toneIndex === 1) mapIndex = 2;
+            if (toneIndex === 2) mapIndex = 3; 
+            if (toneIndex === 3) mapIndex = 4; 
+            if (toneIndex === 4) mapIndex = 5;
             let newChar = map[mapIndex];
             if (caseType === 'upper') newChar = newChar.toUpperCase();
             return newChar;
@@ -476,7 +402,6 @@
             }
             return chars.join('');
         }
-
         function getBaseVowelAndTone(char) {
             const lower = char.toLowerCase();
             for (const [base, variants] of Object.entries(CHAR_MAP)) {
@@ -486,67 +411,48 @@
             }
             return { base: null, caseType: null };
         }
-
-        // --- DOM & INPUT HANDLING ---
-
         const editor = document.getElementById('editor');
         const wordCountEl = document.getElementById('word-count');
         const rootHtml = document.documentElement;
-
         editor.addEventListener('input', (e) => {
             if (!isTelexEnabled) {
                 updateWordCount();
                 return;
             }
-
             const cursorPosition = editor.selectionStart;
             const text = editor.value;
-
-            // Find word boundary
             const textBeforeCursor = text.slice(0, cursorPosition);
-            // Include hyphen and underscore as word separators for better code editing experience
             const lastSeparatorIndex = Math.max(
                 textBeforeCursor.lastIndexOf(' '), 
                 textBeforeCursor.lastIndexOf('\n'),
                 textBeforeCursor.lastIndexOf('\t'),
                 -1
             );
-            
             const startOfWord = lastSeparatorIndex + 1;
             let wordToProcess = textBeforeCursor.slice(startOfWord);
-            
-            // Separate punctuation
             const punctuationMatch = wordToProcess.match(/([.,!?;:()"'`]+)$/);
             let trailingPunctuation = '';
             if (punctuationMatch) {
                 trailingPunctuation = punctuationMatch[1];
                 wordToProcess = wordToProcess.slice(0, -trailingPunctuation.length);
             }
-
             if (wordToProcess.length > 0) {
                 const convertedWord = convertWordToVietnamese(wordToProcess);
                 
                 if (convertedWord !== wordToProcess) {
                     const textAfterCursor = text.slice(cursorPosition);
                     const newTextBeforeCursor = text.slice(0, startOfWord) + convertedWord + trailingPunctuation;
-                    
                     editor.value = newTextBeforeCursor + textAfterCursor;
-                    
                     editor.selectionStart = editor.selectionEnd = newTextBeforeCursor.length;
                 }
             }
-            
             updateWordCount();
         });
-
         function updateWordCount() {
             const text = editor.value.trim();
             const count = text ? text.split(/\s+/).length : 0;
             wordCountEl.textContent = `${count} từ`;
         }
-
-        // --- TOOLBAR ACTIONS ---
-
         const fonts = [
             { name: "Be Vietnam Pro", class: "font-be-vietnam-pro" },
             { name: "Merriweather", class: "font-merriweather" },
@@ -559,20 +465,17 @@
             { name: "Source Sans Pro", class: "font-source-sans-pro" },
             { name: "Lora", class: "font-lora" },
             { name: "Segoe UI", class: "font-[Segoe_UI,sans-serif]" }
-        ];
-        
+        ];    
         const fontMenuButton = document.getElementById('font-menu-button');
         const fontMenu = document.getElementById('font-menu');
         const selectedFontName = document.getElementById('selected-font-name');
         let currentFontClass = "font-be-vietnam-pro";
-
         function populateFontMenu() {
             const menuDiv = fontMenu.querySelector('div');
             menuDiv.innerHTML = ''; 
             fonts.forEach(font => {
                 const item = document.createElement('a');
                 item.href = "#";
-                // Added primary-button-hover class to font menu items as well for consistency
                 item.classList.add('block', 'px-4', 'py-2', 'text-sm', 'text-primary', 'primary-button-hover', font.class);
                 item.setAttribute('role', 'menuitem');
                 item.setAttribute('tabindex', '-1');
@@ -585,27 +488,22 @@
                 menuDiv.appendChild(item);
             });
         }
-
         function setFont(fontClass, fontName) {
             editor.classList.remove(currentFontClass);
             editor.classList.add(fontClass);
             currentFontClass = fontClass;
             selectedFontName.textContent = fontName;
         }
-
         fontMenuButton.addEventListener('click', () => {
             fontMenu.classList.toggle('hidden');
         });
-
         document.addEventListener('click', (event) => {
             if (!fontMenu.contains(event.target) && !fontMenuButton.contains(event.target)) {
                 fontMenu.classList.add('hidden');
             }
         });
-
         const modeToggleBtn = document.getElementById('mode-toggle');
         const modeIndicator = document.getElementById('mode-indicator');
-
         function updateModeToggleUI() {
             if (isTelexEnabled) {
                 modeToggleBtn.classList.add('mode-on-bg', 'mode-on-text');
@@ -619,17 +517,13 @@
                 modeIndicator.classList.remove('bg-emerald-600');
             }
         }
-
         function toggleMode() {
             isTelexEnabled = !isTelexEnabled;
             updateModeToggleUI();
             editor.focus();
         }
-
-
         const moonIcon = document.getElementById('moon-icon');
         const sunIcon = document.getElementById('sun-icon');
-
         function toggleDarkMode() {
             if (rootHtml.classList.contains('light')) {
                 rootHtml.classList.remove('light');
@@ -646,7 +540,6 @@
             }
             editor.focus();
         }
-
         function applyThemePreference() {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme === 'dark') {
@@ -661,9 +554,6 @@
                 sunIcon.style.display = 'inline-block';
             }
         }
-
-        // --- TOAST AND INITIALIZATION ---
-
         const toast = document.getElementById('toast');
         function copyText() {
             editor.select();
@@ -677,16 +567,13 @@
             });
             editor.focus();
         }
-
-        // Initialize on load
         window.onload = () => {
             populateFontMenu();
             applyThemePreference();
             updateWordCount();
-            updateModeToggleUI(); // Initialize the Telex mode UI
+            updateModeToggleUI();
             editor.focus();
         };
-
   </script>
 </body>
 </html>
