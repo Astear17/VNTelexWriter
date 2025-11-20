@@ -166,6 +166,51 @@
             background-color: var(--table-header-bg);
             font-weight: 600;
         }
+        .gradient-text {
+  background: var(--gradient-color);
+  background-size: 300% 300%;
+  animation: slideGradient 6s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  }
+  </style>
+  <style>
+  @keyframes slideGradient {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.custom-gradient-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  background: var(--gradient-color);
+  background-size: 300% 300%;
+  animation: slideGradient 6s linear infinite;
+  transition: opacity 0.3s ease;
+}
+.custom-gradient-button:hover {
+  opacity: 0.85;
+}
+
+/* Static separator (no animation) */
+.gradient-separator {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--gradient-color);
+}
+.gradient-text-static {
+  background: var(--gradient-color);        /* apply your gradient */
+  background-size: cover;                   /* fill the text area */
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;     /* makes the gradient visible */
+}
   </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden">
@@ -266,7 +311,12 @@
   </main>
   <footer class="mt-auto px-4 py-4 text-center w-full">
     <div class="gradient-separator mx-auto w-full max-w-4xl"></div>
-    <p class="text-sm footer-text gradient-text font-medium">Triển khai code và chỉnh sửa dự án bởi Astear17</p>
+    <p class="text-sm footer-text gradient-text-static font-medium">
+  Triển khai code và chỉnh sửa dự án bởi Astear17
+</p>
+    <div class="button-section" style="margin-top: 15px;">
+      <a href="https://astear17.github.io" target="_blank" class="redirect-button custom-gradient-button">Astear17 - Personal site</a>
+    </div>
   </footer>
   <script>
         const CHAR_MAP = {
