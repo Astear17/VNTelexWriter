@@ -1,82 +1,82 @@
 # VN Telex Writer
 
-The **VN Telex Writer** is a fast, single-file, web-based tool for typing Vietnamese text using the Telex input method. It is designed to be fully responsive, work offline, and include advanced logic to handle complex vowel combinations (like `uoiw -> ươi`) common in modern Vietnamese typesetting.
+**VN Telex Writer** là một công cụ gọn nhẹ, nhanh chóng, chạy trên nền web, cho phép gõ tiếng Việt bằng phương pháp nhập Telex. Công cụ được thiết kế để **hoàn toàn responsive**, hoạt động **offline**, và có logic nâng cao để xử lý các tổ hợp nguyên âm phức tạp (như `uoiw -> ươi`) thường gặp trong cách gõ tiếng Việt hiện đại.
 
-This project is deployed live on GitHub Pages at:
+Dự án này được triển khai trực tiếp trên GitHub Pages tại:
 
 ➡️ [Live Demo: VN Telex Writer](https://astear17.github.io/VNTelexWriter/)
 
-## ✨ Features
+## ✨ Tính năng
 
-- **Single-File Application**: The entire editor (HTML, CSS/Tailwind, and JavaScript Telex Engine) is contained in one portable file.
-- **Revised Telex Engine**: Implements advanced rules, fixing edge cases like `cuoiw` to correctly output `cười` and handling complex triphthongs.
-- **Real-time Conversion**: Converts Telex input to Vietnamese characters immediately as you type within the word boundary.
-- **Theme Toggle**: Supports Light and Dark mode.
-- **Font Selection**: Allows users to choose from several modern, legible fonts.
-- **Copy Functionality**: Easily copy the final converted text.
-- **Telex On/Off Toggle**: Allows switching the conversion engine on or off instantly.
+- **Ứng dụng một file duy nhất**: Toàn bộ trình soạn thảo (HTML, CSS/Tailwind, và JavaScript Telex Engine) nằm gọn trong một file duy nhất, dễ dàng mang theo.
+- **Telex Engine cải tiến**: Áp dụng các quy tắc nâng cao, sửa các trường hợp đặc biệt như `cuoiw` để cho ra kết quả đúng là `cười`, đồng thời xử lý các nguyên âm ghép phức tạp.
+- **Chuyển đổi theo thời gian thực**: Tự động chuyển đổi đầu vào Telex sang ký tự tiếng Việt ngay khi bạn gõ trong phạm vi từ.
+- **Chuyển đổi giao diện**: Hỗ trợ chế độ Sáng và Tối.
+- **Lựa chọn phông chữ**: Cho phép người dùng chọn nhiều phông chữ hiện đại, dễ đọc.
+- **Chức năng sao chép**: Dễ dàng sao chép văn bản đã chuyển đổi.
+- **Bật/Tắt Telex**: Cho phép bật hoặc tắt bộ máy chuyển đổi ngay lập tức.
 
-## ✍️ How to Use (Telex Rules)
+## ✍️ Cách sử dụng (Quy tắc Telex)
 
-The editor uses the standard Telex input method. The system relies on key combinations to input diacritics (tone marks) and vowel modifications (breves, horns, circumflexes).
+Trình soạn thảo sử dụng phương pháp nhập Telex tiêu chuẩn. Hệ thống dựa vào các tổ hợp phím để nhập dấu thanh và biến đổi nguyên âm (dấu mũ, dấu ă, dấu ơ, dấu ư).
 
-### Vowel Modifications (Vowels with Hats/Horns)
+### Biến đổi nguyên âm (Nguyên âm có dấu mũ/dấu ơ/dấu ă)
 
-| Vowel | Input Key | Example | Output |
-|-------|-----------|---------|--------|
-| ă     | aw        | bawn    | băn    |
-| â     | aa        | laam    | lâm    |
-| ê     | ee        | teen    | tên    |
-| ô     | oo        | tooi    | tôi    |
-| ơ     | ow        | mow     | mơ     |
-| ư     | uw or w   | tuw/tw  | tư     |
-| đ     | dd        | ddieen  | điên   |
+| Nguyên âm | Phím nhập | Ví dụ   | Kết quả |
+|-----------|-----------|---------|---------|
+| ă         | aw        | bawn    | băn     |
+| â         | aa        | laam    | lâm     |
+| ê         | ee        | teen    | tên     |
+| ô         | oo        | tooi    | tôi     |
+| ơ         | ow        | mow     | mơ      |
+| ư         | uw hoặc w | tuw/tw  | tư      |
+| đ         | dd        | ddieen  | điên    |
 
-### Tone Marks (Diacritics)
+### Dấu thanh
 
-The tone mark is typed at the end of the word.
+Dấu thanh được gõ ở cuối từ.
 
-| Tone Mark | Name  | Input Key | Example | Output |
-|-----------|-------|-----------|---------|--------|
-| s         | Sắc (Acute) | s         | tas     | tá     |
-| f         | Huyền (Grave) | f         | taf     | tạ     |
-| r         | Hỏi (Hook)   | r         | tar     | tả     |
-| x         | Ngã (Tilde)  | x         | tax     | tã     |
-| j         | Nặng (Dot)   | j         | taj     | tại    |
-| z         | Remove Tone   | z         | táz     | ta     |
+| Phím | Tên dấu | Phím nhập | Ví dụ | Kết quả |
+|------|---------|-----------|-------|---------|
+| s    | Sắc     | s         | tas   | tá      |
+| f    | Huyền   | f         | taf   | tạ      |
+| r    | Hỏi     | r         | tar   | tả      |
+| x    | Ngã     | x         | tax   | tã      |
+| j    | Nặng    | j         | taj   | tại     |
+| z    | Xóa dấu | z         | táz   | ta      |
 
-## 💻 Technical Deep Dive: The Telex Engine
+## 💻 Phân tích kỹ thuật: Telex Engine
 
-The core functionality resides in the `convertWordToVietnamese` JavaScript function, which uses a prioritized sequence of regular expressions and vowel placement logic to ensure correct conversion.
+Chức năng cốt lõi nằm trong hàm JavaScript `convertWordToVietnamese`, sử dụng chuỗi các biểu thức chính quy và logic đặt nguyên âm ưu tiên để đảm bảo chuyển đổi chính xác.
 
-The conversion happens in two main phases:
+Quá trình chuyển đổi diễn ra qua hai giai đoạn chính:
 
-### Phase 1: Vowel and Consonant Modification (Breves, Horns, Circumflex)
-This phase handles the transformation of base vowels and the 'd' consonant using `o`, `e`, and `w` keys. Crucially, the engine applies special logic to handle complex vowel clusters before simple replacements.
+### Giai đoạn 1: Biến đổi nguyên âm và phụ âm (ă, ơ, â, ê, ô, đ)
+Giai đoạn này xử lý việc biến đổi nguyên âm cơ bản và phụ âm 'd' bằng các phím `o`, `e`, và `w`. Đặc biệt, engine áp dụng logic riêng để xử lý cụm nguyên âm phức tạp trước khi thay thế đơn giản.
 
-| Rule Category               | Input Pattern       | Output Vowel    | Purpose                                      |
-|-----------------------------|---------------------|-----------------|----------------------------------------------|
-| **Complex Vowels (Fixes)**   | uo([a-zA-Z]*)w       | ươ + group      | Fixes the `cuoiw` issue. Converts complex sequences like `uoiw` to `ươi` (e.g., `tươi`). |
-| **Special Vowel Clusters**   | uaw                 | ưa              | Correctly handles the `ua` cluster (e.g., `quaw` is an exception). |
-| **Simple Breves/Horns**      | aw, ow, uw           | ă, ơ, ư         | Standard conversion for these three core vowels. |
-| **Circumflex/Đ**            | aa, ee, oo, dd       | â, ê, ô, đ       | Standard conversion for "hatted" vowels and 'đ'. |
+| Loại quy tắc               | Mẫu nhập            | Nguyên âm xuất ra | Mục đích |
+|-----------------------------|---------------------|------------------|----------|
+| **Nguyên âm phức tạp**      | uo([a-zA-Z]*)w      | ươ + nhóm        | Sửa lỗi `cuoiw`. Chuyển đổi chuỗi phức tạp như `uoiw` thành `ươi` (ví dụ: `tươi`). |
+| **Cụm nguyên âm đặc biệt**  | uaw                 | ưa               | Xử lý đúng cụm `ua` (ví dụ: `quaw` là ngoại lệ). |
+| **Nguyên âm cơ bản**        | aw, ow, uw          | ă, ơ, ư          | Chuyển đổi tiêu chuẩn cho ba nguyên âm chính. |
+| **Nguyên âm có mũ/Đ**       | aa, ee, oo, dd      | â, ê, ô, đ       | Chuyển đổi tiêu chuẩn cho nguyên âm có dấu mũ và phụ âm 'đ'. |
 
-### Phase 2: Tone Application
-After vowel modification, the engine checks the last character of the word for a tone key (`s`, `f`, `r`, `x`, `j`). If a tone key is found, it uses the `applyTone` function, which contains Smart Tone Placement Logic:
+### Giai đoạn 2: Áp dụng dấu thanh
+Sau khi biến đổi nguyên âm, engine kiểm tra ký tự cuối của từ để tìm phím dấu thanh (`s`, `f`, `r`, `x`, `j`). Nếu có, hàm `applyTone` sẽ được gọi, với logic thông minh để đặt dấu:
 
-1. **Identify Vowels**: Finds all vowel indices within the word.
-2. **One Vowel Rule**: If there is only one vowel (e.g., `lam`), the tone is placed there (e.g., `làm`).
-3. **Complex Vowel Rule (Diphthongs/Triphthongs)**: For words with two or more vowels (e.g., `hoan`, `tươi`), the logic determines the "nuclear" vowel—the one that carries the tone—based on phonetic rules of open vs. closed syllables (i.e., whether the word ends in a vowel or a consonant).
-    - Example (Two Vowels, Closed Syllable): In `hoan`, the tone is typically placed on the second vowel (`a`) to become `hoán`.
-4. **Apply Tone**: Uses the CHAR_MAP (e.g., `aàáảãạ`) to apply the tone corresponding to the input key (0=Huyền, 1=Sắc, 2=Hỏi, 3=Ngã, 4=Nặng) to the determined nuclear vowel.
+1. **Xác định nguyên âm**: Tìm tất cả vị trí nguyên âm trong từ.
+2. **Quy tắc một nguyên âm**: Nếu chỉ có một nguyên âm (ví dụ: `lam`), dấu được đặt tại đó (`làm`).
+3. **Quy tắc nguyên âm phức tạp**: Với từ có hai hoặc nhiều nguyên âm (ví dụ: `hoan`, `tươi`), logic xác định nguyên âm "chính" để đặt dấu, dựa trên quy tắc âm tiết mở/đóng.
+   - Ví dụ (hai nguyên âm, âm tiết đóng): Trong `hoan`, dấu thường đặt trên nguyên âm thứ hai (`a`) thành `hoán`.
+4. **Áp dụng dấu**: Sử dụng CHAR_MAP (ví dụ: `aàáảãạ`) để áp dụng dấu tương ứng với phím nhập (0=Huyền, 1=Sắc, 2=Hỏi, 3=Ngã, 4=Nặng).
 
-This layered approach ensures that complex sequences are handled correctly before the tone is applied, providing highly accurate conversion.
+Cách tiếp cận nhiều lớp này đảm bảo các chuỗi phức tạp được xử lý đúng trước khi áp dụng dấu, mang lại kết quả chính xác cao.
 
 ---
 
-## 🔧 Development
+## 🔧 Phát triển
 
-To run the VN Telex Writer locally, clone the repository and open the `index.html` file in your browser.
+Để chạy VN Telex Writer trên máy cục bộ, hãy clone repository và mở file `index.html` trong trình duyệt.
 
 ```bash
 git clone https://github.com/Astear17/VNTelexWriter.git
