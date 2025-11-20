@@ -1,6 +1,6 @@
 # VN Telex Writer
 
-**VN Telex Writer** là một công cụ gọn nhẹ, nhanh chóng, chạy trên nền web, cho phép gõ tiếng Việt bằng phương pháp nhập Telex. Công cụ được thiết kế để **hoàn toàn responsive**, hoạt động **offline**, và có logic nâng cao để xử lý các tổ hợp nguyên âm phức tạp (như `uoiw -> ươi`) thường gặp trong cách gõ tiếng Việt hiện đại.
+**VN Telex Writer** là một công cụ gọn nhẹ, nhanh chóng, chạy trên nền web, cho phép gõ tiếng Việt bằng phương pháp nhập Telex. Công cụ được thiết kế để **hoàn toàn responsive**, và có logic nâng cao để xử lý các tổ hợp nguyên âm phức tạp (như `uowi -> ươi`) thường gặp trong cách gõ tiếng Việt hiện đại.
 
 Dự án này được triển khai trực tiếp trên GitHub Pages tại:
 
@@ -9,9 +9,9 @@ Dự án này được triển khai trực tiếp trên GitHub Pages tại:
 ## ✨ Tính năng
 
 - **Ứng dụng một file duy nhất**: Toàn bộ trình soạn thảo (HTML, CSS/Tailwind, và JavaScript Telex Engine) nằm gọn trong một file duy nhất, dễ dàng mang theo.
-- **Telex Engine cải tiến**: Áp dụng các quy tắc nâng cao, sửa các trường hợp đặc biệt như `cuoiw` để cho ra kết quả đúng là `cười`, đồng thời xử lý các nguyên âm ghép phức tạp.
+- **Telex Engine cải tiến**: Áp dụng các quy tắc nâng cao, sửa các trường hợp đặc biệt như `cuowfi` để cho ra kết quả đúng là `cười`, đồng thời xử lý các nguyên âm ghép phức tạp.
 - **Chuyển đổi theo thời gian thực**: Tự động chuyển đổi đầu vào Telex sang ký tự tiếng Việt ngay khi bạn gõ trong phạm vi từ.
-- **Chuyển đổi giao diện**: Hỗ trợ chế độ Sáng và Tối.
+- **Chuyển đổi giao diện**: Hỗ trợ chế độ sáng và tối.
 - **Lựa chọn phông chữ**: Cho phép người dùng chọn nhiều phông chữ hiện đại, dễ đọc.
 - **Chức năng sao chép**: Dễ dàng sao chép văn bản đã chuyển đổi.
 - **Bật/Tắt Telex**: Cho phép bật hoặc tắt bộ máy chuyển đổi ngay lập tức.
@@ -39,10 +39,10 @@ Dấu thanh được gõ ở cuối từ.
 | Phím | Tên dấu | Phím nhập | Ví dụ | Kết quả |
 |------|---------|-----------|-------|---------|
 | s    | Sắc     | s         | tas   | tá      |
-| f    | Huyền   | f         | taf   | tạ      |
+| f    | Huyền   | f         | taf   | tà      |
 | r    | Hỏi     | r         | tar   | tả      |
 | x    | Ngã     | x         | tax   | tã      |
-| j    | Nặng    | j         | taj   | tại     |
+| j    | Nặng    | j         | taj   | tạ      |
 | z    | Xóa dấu | z         | táz   | ta      |
 
 ## 💻 Phân tích kỹ thuật: Telex Engine
