@@ -54,26 +54,20 @@
             --table-border: #4a5568;
             --button-hover-bg: #334155;
         }
-
-        /* Global default font */
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-light);
             color: var(--text-light);
         }
-
-        /* Exclude typing box */
         textarea {
             resize: none;
             background-color: transparent;
-            font-family: inherit; /* keep system font */
+            font-family: inherit;
         }
-
-        /* Exclude font menu button and dropdown */
         #font-menu-button,
         #font-menu,
         #selected-font-name {
-            font-family: inherit; /* keep system font */
+            font-family: inherit; 
         }
 
         body, nav, button, textarea, 
@@ -179,9 +173,9 @@
   0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
-}
+  }
 
-.custom-gradient-button {
+  .custom-gradient-button {
   display: inline-block;
   padding: 10px 20px;
   font-size: 16px;
@@ -193,24 +187,22 @@
   background-size: 300% 300%;
   animation: slideGradient 6s linear infinite;
   transition: opacity 0.3s ease;
-}
-.custom-gradient-button:hover {
+  }
+  .custom-gradient-button:hover {
   opacity: 0.85;
-}
-
-/* Static separator (no animation) */
-.gradient-separator {
+  }
+  .gradient-separator {
   height: 4px;
   border-radius: 2px;
   background: var(--gradient-color);
-}
-.gradient-text-static {
-  background: var(--gradient-color);        /* apply your gradient */
-  background-size: cover;                   /* fill the text area */
+  }
+  .gradient-text-static {
+  background: var(--gradient-color);        
+  background-size: cover;                 
   background-repeat: no-repeat;
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;     /* makes the gradient visible */
-}
+  -webkit-text-fill-color: transparent;    
+  }
   </style>
 </head>
 <body class="min-h-screen flex flex-col overflow-x-hidden">
@@ -311,9 +303,7 @@
   </main>
   <footer class="mt-auto px-4 py-4 text-center w-full">
     <div class="gradient-separator mx-auto w-full max-w-4xl"></div>
-    <p class="text-sm footer-text gradient-text-static font-medium">
-  Triển khai code và chỉnh sửa dự án bởi Astear17
-</p>
+    <p class="text-sm footer-text gradient-text-static font-medium">Triển khai code và chỉnh sửa dự án bởi Astear17</p>
     <div class="button-section" style="margin-top: 15px;">
       <a href="https://astear17.github.io" target="_blank" class="redirect-button custom-gradient-button">Astear17 - Personal site</a>
     </div>
@@ -518,57 +508,65 @@
             wordCountEl.textContent = `${count} từ`;
         }
         const fonts = [
-            { name: "Be Vietnam Pro", class: "font-be-vietnam-pro" },
-            { name: "Merriweather", class: "font-merriweather" },
-            { name: "Roboto", class: "font-roboto" },
-            { name: "Open Sans", class: "font-open-sans" },
-            { name: "Inter", class: "font-inter" },
-            { name: "Noto Serif", class: "font-noto-serif" },
-            { name: "Lato", class: "font-lato" },
-            { name: "Montserrat", class: "font-montserrat" },
-            { name: "PT Sans", class: "font-pt-sans" },
-            { name: "Source Sans Pro", class: "font-source-sans-pro" },
-            { name: "Lora", class: "font-lora" }
-        ];    
+  { name: "Be Vietnam Pro", class: "font-be-vietnam-pro", fontFamily: '"Be Vietnam Pro", sans-serif' },
+  { name: "Merriweather", class: "font-merriweather", fontFamily: '"Merriweather", serif' },
+  { name: "Roboto", class: "font-roboto", fontFamily: '"Roboto", sans-serif' },
+  { name: "Open Sans", class: "font-open-sans", fontFamily: '"Open Sans", sans-serif' },
+  { name: "Inter", class: "font-inter", fontFamily: '"Inter", sans-serif' },
+  { name: "Noto Serif", class: "font-noto-serif", fontFamily: '"Noto Serif", serif' },
+  { name: "Lato", class: "font-lato", fontFamily: '"Lato", sans-serif' },
+  { name: "Montserrat", class: "font-montserrat", fontFamily: '"Montserrat", sans-serif' },
+  { name: "PT Sans", class: "font-pt-sans", fontFamily: '"PT Sans", sans-serif' },
+  { name: "Source Sans Pro", class: "font-source-sans-pro", fontFamily: '"Source Sans Pro", sans-serif' },
+  { name: "Lora", class: "font-lora", fontFamily: '"Lora", serif' }
+  ];  
         const fontMenuButton = document.getElementById('font-menu-button');
-        const fontMenu = document.getElementById('font-menu');
+  const fontMenu = document.getElementById('font-menu');
         const selectedFontName = document.getElementById('selected-font-name');
-        let currentFontClass = "font-be-vietnam-pro";
+  let currentFontClass = "font-be-vietnam-pro";
         function populateFontMenu() {
-            const menuDiv = fontMenu.querySelector('div');
-            menuDiv.innerHTML = ''; 
-            fonts.forEach(font => {
-                const item = document.createElement('a');
-                item.href = "#";
-                item.classList.add('block', 'px-4', 'py-2', 'text-sm', 'text-primary', 'primary-button-hover', font.class);
-                item.setAttribute('role', 'menuitem');
-                item.setAttribute('tabindex', '-1');
-                item.textContent = font.name;
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    setFont(font.class, font.name);
-                    fontMenu.classList.add('hidden');
-                });
-                menuDiv.appendChild(item);
-            });
+    const menuDiv = fontMenu.querySelector('div');
+    menuDiv.innerHTML = '';
+    fonts.forEach(font => {
+      const item = document.createElement('a');
+      item.href = "#";
+      item.classList.add(
+        'block','px-4','py-2','text-sm','text-primary','primary-button-hover',
+        font.class
+      );
+      item.setAttribute('role', 'menuitem');
+      item.setAttribute('tabindex', '-1');
+      item.textContent = font.name;
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        setFont(font.class, font.name, font.fontFamily);
+        fontMenu.classList.add('hidden');
+      });
+      menuDiv.appendChild(item);
+    });
         }
-        function setFont(fontClass, fontName) {
-  editor.classList.remove(currentFontClass);
-  editor.classList.add(fontClass);
-  currentFontClass = fontClass;
-  selectedFontName.textContent = fontName;
-  selectedFontName.classList.remove(...selectedFontName.classList);
-  selectedFontName.classList.add(fontClass, "hidden", "sm:inline");
+        function setFont(fontClass, fontName, fontFamily) {
+    editor.classList.remove(currentFontClass);
+    editor.classList.add(fontClass);
+    editor.style.fontFamily = fontFamily;
+    currentFontClass = fontClass;
+    selectedFontName.textContent = fontName;
+    selectedFontName.style.fontFamily = fontFamily;
+    selectedFontName.classList.remove('hidden');
   }
-        fontMenuButton.addEventListener('click', () => {
-            fontMenu.classList.toggle('hidden');
-        });
-        document.addEventListener("DOMContentLoaded", () => {
-  setFont("font-inter", "Inter");
+
+  fontMenuButton.addEventListener('click', () => {
+    fontMenu.classList.toggle('hidden');
   });
-        document.addEventListener('click', (event) => {
-            if (!fontMenu.contains(event.target) && !fontMenuButton.contains(event.target)) {
-                fontMenu.classList.add('hidden');
+
+  document.addEventListener("DOMContentLoaded", () => {
+    populateFontMenu();
+    setFont("font-inter", "Inter", '"Inter", sans-serif');
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!fontMenu.contains(event.target) && !fontMenuButton.contains(event.target)) {
+      fontMenu.classList.add('hidden');
             }
         });
         const modeToggleBtn = document.getElementById('mode-toggle');
