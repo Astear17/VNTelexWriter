@@ -2,19 +2,17 @@
 
 **VN Telex Writer** là một công cụ gọn nhẹ, nhanh chóng, chạy trên nền web, cho phép gõ tiếng Việt bằng phương pháp nhập Telex. Công cụ được thiết kế để **hoàn toàn responsive**, và có logic nâng cao để xử lý các tổ hợp nguyên âm phức tạp (như `uowi -> ươi`) thường gặp trong cách gõ tiếng Việt hiện đại.
 
-Dự án này được triển khai trực tiếp trên GitHub Pages tại:
-
-➡️ [Live Demo: VN Telex Writer](https://astear17.github.io/VNTelexWriter/)
+Dự án này được triển khai trực tiếp trên GitHub Pages tại: [VN Telex Writer](https://astear17.github.io/VNTelexWriter/)
 
 ## ✨ Tính năng
 
-- **Ứng dụng một file duy nhất**: Toàn bộ trình soạn thảo (HTML, CSS/Tailwind, và JavaScript Telex Engine) nằm gọn trong một file duy nhất, dễ dàng mang theo.
+- **Deploy một file duy nhất**: Toàn bộ trình soạn thảo (HTML, CSS/Tailwind, và JavaScript Telex Engine) nằm gọn trong một file `index.html` duy nhất, dễ dàng chỉnh sửa.
 - **Telex Engine cải tiến**: Áp dụng các quy tắc nâng cao, sửa các trường hợp đặc biệt như `cuowfi` để cho ra kết quả đúng là `cười`, đồng thời xử lý các nguyên âm ghép phức tạp.
 - **Chuyển đổi theo thời gian thực**: Tự động chuyển đổi đầu vào Telex sang ký tự tiếng Việt ngay khi bạn gõ trong phạm vi từ.
 - **Chuyển đổi giao diện**: Hỗ trợ chế độ sáng và tối.
 - **Lựa chọn phông chữ**: Cho phép người dùng chọn nhiều phông chữ hiện đại, dễ đọc.
 - **Chức năng sao chép**: Dễ dàng sao chép văn bản đã chuyển đổi.
-- **Bật/Tắt Telex**: Cho phép bật hoặc tắt bộ máy chuyển đổi ngay lập tức.
+- **Bật/Tắt Telex**: Cho phép bật hoặc tắt bộ chuyển đổi Telex ngay lập tức.
 
 ## ✍️ Cách sử dụng (Quy tắc Telex)
 
@@ -52,7 +50,7 @@ Chức năng cốt lõi nằm trong hàm JavaScript `convertWordToVietnamese`, s
 Quá trình chuyển đổi diễn ra qua hai giai đoạn chính:
 
 ### Giai đoạn 1: Biến đổi nguyên âm và phụ âm (ă, ơ, â, ê, ô, đ)
-Giai đoạn này xử lý việc biến đổi nguyên âm cơ bản và phụ âm 'd' bằng các phím `o`, `e`, và `w`. Đặc biệt, engine áp dụng logic riêng để xử lý cụm nguyên âm phức tạp trước khi thay thế đơn giản.
+Giai đoạn này xử lý việc biến đổi nguyên âm cơ bản và phụ âm bằng các phím `o`, `e`, và `w`. Đặc biệt, engine áp dụng logic riêng để xử lý cụm nguyên âm phức tạp trước khi thay thế đơn giản.
 
 | Loại quy tắc               | Mẫu nhập            | Nguyên âm xuất ra | Mục đích |
 |-----------------------------|---------------------|------------------|----------|
